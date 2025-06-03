@@ -1,8 +1,10 @@
 /* src/components/Navbar.jsx */
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { navLinks } from "../data/data";
 import Button from "./common/Button";
+import LogoImg from "../assets/Logo.png";
+
 import { FaBars, FaTimes } from "react-icons/fa";
 
 const Navbar = () => {
@@ -18,12 +20,26 @@ const Navbar = () => {
       className="fixed w-full bg-white bg-opacity-95 shadow-lg z-50 py-4 px-6 md:px-12"
     >
       <div className="container mx-auto flex justify-between items-center">
-        <a
+        {/* <a
           href="#home"
           className="text-2xl font-bold font-serif text-dark hover:text-primary transition-colors duration-300"
           aria-label="Dream Estates Home"
         >
           Dream Estates
+        </a> */}
+        <a
+          href="#home"
+          className="flex items-center space-x-2"
+          aria-label="Dream Estates Home"
+        >
+          <img
+            src={LogoImg} // Replace with actual logo path
+            alt="Logo"
+            className="h-10 w-auto object-contain"
+          />
+          <span className="text-2xl font-bold font-serif text-dark hover:text-primary transition-colors duration-300">
+            Dream Estates
+          </span>
         </a>
         <ul className="hidden md:flex space-x-8">
           {navLinks.map((link) => (

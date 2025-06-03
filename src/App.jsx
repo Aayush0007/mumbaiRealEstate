@@ -1,16 +1,18 @@
-
-/* src/App.jsx */
 import { ThemeProvider } from './context/ThemeContext';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
+import ProjectDetailsPage from './pages/ProjectDetailsPage';
 import ScrollToTop from './components/common/ScrollToTop';
-import { BrowserRouter as Router } from 'react-router-dom';
 
 const App = () => {
   return (
     <ThemeProvider>
       <Router>
         <ScrollToTop />
-        <Home />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/properties/:id" element={<ProjectDetailsPage />} />
+        </Routes>
       </Router>
     </ThemeProvider>
   );

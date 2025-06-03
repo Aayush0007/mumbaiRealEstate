@@ -1,9 +1,50 @@
-
-/* src/components/ContactForm.jsx */
 import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Button from './common/Button';
 import Section from './common/Section';
+
+const FormField = ({ id, label, type = 'text', name, value, onChange, error, placeholder, rows }) => (
+  <div className="relative">
+    <label htmlFor={id} className="block text-text text-sm font-semibold mb-2">
+      {label}
+    </label>
+    {type === 'textarea' ? (
+      <textarea
+        id={id}
+        name={name}
+        value={value}
+        onChange={onChange}
+        rows={rows}
+        className={`w-full py-3 px-4 rounded-lg bg-offwhite text-text shadow-cute focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all ${error ? 'border-2 border-red-500' : 'border border-offwhite/50'}`}
+        placeholder={placeholder}
+        aria-invalid={!!error}
+        aria-describedby={error ? `${id}-error` : undefined}
+      />
+    ) : (
+      <input
+        type={type}
+        id={id}
+        name={name}
+        value={value}
+        onChange={onChange}
+        className={`w-full py-3 px-4 rounded-lg bg-offwhite text-text shadow-cute focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all ${error ? 'border-2 border-red-500' : 'border border-offwhite/50'}`}
+        placeholder={placeholder}
+        aria-invalid={!!error}
+        aria-describedby={error ? `${id}-error` : undefined}
+      />
+    )}
+    {error && (
+      <motion.p
+        id={`${id}-error`}
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="text-red-500 text-sm mt-1"
+      >
+        {error}
+      </motion.p>
+    )}
+  </div>
+);
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -13,33 +54,88 @@ const ContactForm = () => {
     message: '',
   });
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
   const formRef = useRef(null);
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = 'Name is required';
-    if (!formData.email.trim()) newErrors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Invalid email format';
-    if (!formData.message.trim()) newErrors.message = 'Message is required';
-    return newErrors;
-  };
+  const fields = [
+    {
+      id: 'name',
+      label: 'Name',
+      name: 'name',
+      placeholder: 'Your Name',
+      required: true,
+    },
+    {
+      id: 'email',
+      label: 'Email',
+      name: 'email',
+      type: 'email',
+      placeholder: 'your.email@example.com',
+      required: true,
+    },
+    {
+      id: 'phone',
+      label: 'Phone (Optional)',
+      name: 'phone',
+      type: 'tel',
+      placeholder: '+1 (123) 456-7890',
+    },
+    {
+      id: 'message',
+      label: 'Message',
+      name: 'message',
+      type: 'textarea',
+      placeholder: 'Tell us about your needs...',
+      rows: 5,
+      required: true,
+    },
+  ];
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formErrors = validateForm();
-    if (Object.keys(formErrors).length > 0) {
-      setErrors(formErrors);
-      return;
+  const validateField = (name, value) => {
+    if (name === 'name' && !value.trim()) return 'Name is required';
+    if (name === 'email') {
+      if (!value.trim()) return 'Email is required';
+      if (!/\S+@\S+\.\S+/.test(value)) return 'Invalid email format';
     }
-    alert('Form submitted! (No backend configured)');
-    setFormData({ name: '', email: '', phone: '', message: '' });
-    setErrors({});
-    formRef.current.focus();
+    if (name === 'message' && !value.trim()) return 'Message is required';
+    return '';
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: '' });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = {};
+    fields.forEach((field) => {
+      if (field.required) {
+        newErrors[field.name] = validateField(field.name, formData[field.name]);
+      }
+    });
+
+    if (Object.values(newErrors).some((error) => error)) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setIsSubmitting(true);
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setFormData({ name: '', email: '', phone: '', message: '' });
+    setErrors({});
+    setIsSubmitting(false);
+    setSuccess(true);
+    setTimeout(() => setSuccess(false), 3000); // Hide success message after 3s
+    formRef.current.focus();
   };
 
   return (
@@ -50,7 +146,7 @@ const ContactForm = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-3xl md:text-4xl font-bold font-serif text-dark text-center mb-12"
+          className="text-3xl md:text-4xl font-bold font-serif text-text text-center mb-12"
         >
           Get in Touch
         </motion.h2>
@@ -59,97 +155,37 @@ const ContactForm = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.7 }}
-          className="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-lg"
+          className="max-w-xl mx-auto bg-light p-8 rounded-2xl shadow-cute border border-offwhite"
         >
+          {success && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="bg-accent-light text-text p-4 rounded-lg mb-6 text-center"
+            >
+              Message sent successfully!
+            </motion.div>
+          )}
           <form ref={formRef} onSubmit={handleSubmit} className="space-y-6" noValidate>
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
+            {fields.map((field) => (
+              <FormField
+                key={field.id}
+                {...field}
+                value={formData[field.name]}
                 onChange={handleChange}
-                className={`shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${errors.name ? 'border-red-500' : ''}`}
-                placeholder="Your Name"
-                aria-describedby={errors.name ? 'name-error' : undefined}
+                onBlur={handleBlur}
+                error={errors[field.name]}
               />
-              {errors.name && (
-                <p id="name-error" className="text-red-500 text-sm mt-1">
-                  {errors.name}
-                </p>
-              )}
-            </div>
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className={`shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${errors.email ? 'border-red-500' : ''}`}
-                placeholder="your.email@example.com"
-                aria-describedby={errors.email ? 'email-error' : undefined}
-              />
-              {errors.email && (
-                <p id="email-error" className="text-red-500 text-sm mt-1">
-                  {errors.email}
-                </p>
-              )}
-            </div>
-            <div>
-              <label
-                htmlFor="phone"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                Phone (Optional)
-              </label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="+1 (123) 456-7890"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="message"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                rows={5}
-                className={`shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${errors.message ? 'border-red-500' : ''}`}
-                placeholder="Tell us about your needs..."
-                aria-describedby={errors.message ? 'message-error' : undefined}
-              />
-              {errors.message && (
-                <p id="message-error" className="text-red-500 text-sm mt-1">
-                  {errors.message}
-                </p>
-              )}
-            </div>
+            ))}
             <div className="flex items-center justify-center">
-              <Button type="submit">Send Message</Button>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className={`px-8 py-3 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                {isSubmitting ? 'Sending...' : 'Send Message'}
+              </Button>
             </div>
           </form>
         </motion.div>

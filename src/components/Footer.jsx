@@ -1,63 +1,174 @@
-/* src/components/Footer.jsx */
-import { footerContent, navLinks } from '../data/data'; // Add navLinks import
-import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaPinterest } from 'react-icons/fa';
+import { footerContent, navLinks } from '../data/data';
+import { useTheme } from '../context/ThemeContext';
 
 const iconMap = {
-  FaFacebook: FaFacebook,
-  FaTwitter: FaTwitter,
-  FaInstagram: FaInstagram,
+  FaFacebook,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedin,
+  FaPinterest,
+};
+
+const CompanyInfo = ({ companyName, address, phone, email }) => {
+  const { theme } = useTheme();
+  return (
+    <section aria-label="Company Information">
+      <motion.h3
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="text-2xl font-bold font-serif text-primary mb-4"
+      >
+        {companyName}
+      </motion.h3>
+      <motion.p
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="text-sm text-offwhite mb-2"
+      >
+        {address}
+      </motion.p>
+      <motion.p
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+        className="text-sm text-offwhite mb-2"
+      >
+        Phone: <a href={`tel:${phone}`} className="hover:text-accent transition-colors">{phone}</a>
+      </motion.p>
+      <motion.p
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className="text-sm text-offwhite"
+      >
+        Email: <a href={`mailto:${email}`} className="hover:text-accent transition-colors">{email}</a>
+      </motion.p>
+    </section>
+  );
+};
+
+const QuickLinks = ({ links }) => {
+  const { theme } = useTheme();
+  return (
+    <section aria-label="Quick Links">
+      <motion.h4
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="text-xl font-semibold text-primary mb-4"
+      >
+        Quick Links
+      </motion.h4>
+      <nav>
+        <ul className="space-y-2">
+          {links.map((link, index) => (
+            <motion.li
+              key={link.name}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <a
+                href={link.href}
+                className="text-offwhite hover:text-accent transition-colors duration-200 text-sm"
+                aria-current={window.location.pathname === link.href ? 'page' : undefined}
+              >
+                {link.name}
+              </a>
+            </motion.li>
+          ))}
+        </ul>
+      </nav>
+    </section>
+  );
+};
+
+const SocialMedia = ({ socialLinks }) => {
+  const { theme } = useTheme();
+  return (
+    <section aria-label="Social Media">
+      <motion.h4
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="text-xl font-semibold text-primary mb-4"
+      >
+        Follow Us
+      </motion.h4>
+      <div className="flex space-x-4">
+        {socialLinks.map((link, index) => {
+          const IconComponent = iconMap[link.icon];
+          return (
+            <motion.a
+              key={link.name}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.2, rotate: 5 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+              className="text-offwhite hover:text-accent bg-light/10 p-2 rounded-full shadow-cute transition-colors"
+              aria-label={`Follow us on ${link.name}`}
+            >
+              <IconComponent size={24} />
+            </motion.a>
+          );
+        })}
+      </div>
+    </section>
+  );
 };
 
 const Footer = () => {
+  const { theme } = useTheme();
+
+  const updatedSocialLinks = [
+    { name: 'Facebook', icon: 'FaFacebook', href: footerContent.socialLinks.find(l => l.name === 'Facebook')?.href || '#' },
+    { name: 'Twitter', icon: 'FaTwitter', href: footerContent.socialLinks.find(l => l.name === 'Twitter')?.href || '#' },
+    { name: 'Instagram', icon: 'FaInstagram', href: footerContent.socialLinks.find(l => l.name === 'Instagram')?.href || '#' },
+    { name: 'LinkedIn', icon: 'FaLinkedin', href: 'https://www.linkedin.com/company/yourcompany' },
+    { name: 'Pinterest', icon: 'FaPinterest', href: 'https://www.pinterest.com/yourcompany' },
+  ];
+
   return (
-    <footer className="bg-dark text-light py-10 md:py-16">
-      <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="mb-6 md:mb-0">
-          <h3 className="text-2xl font-bold font-serif text-primary mb-4">
-            {footerContent.companyName}
-          </h3>
-          <p className="text-sm mb-2">{footerContent.address}</p>
-          <p className="text-sm mb-2">Phone: {footerContent.phone}</p>
-          <p className="text-sm">Email: {footerContent.email}</p>
+    <footer
+      className="bg-dark text-offwhite py-12 md:py-16 relative overflow-hidden"
+      aria-label="Website Footer"
+    >
+      <div className="absolute inset-0 bg-gradient-to-t from-dark/80 to-transparent" />
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          <CompanyInfo
+            companyName={footerContent.companyName || 'Mumbai Real Estate'}
+            address={footerContent.address || '123 Thane Road, Mumbai, India'}
+            phone={footerContent.phone || '+91 123 456 7890'}
+            email={footerContent.email || 'info@mumbairealestate.com'}
+          />
+          <QuickLinks links={navLinks || []} />
+          <SocialMedia socialLinks={updatedSocialLinks} />
         </div>
-        <div>
-          <h4 className="text-xl font-semibold mb-4 text-primary">Quick Links</h4>
-          <ul className="space-y-2">
-            {navLinks.map((link) => (
-              <li key={link.name}>
-                <a
-                  href={link.href}
-                  className="hover:text-primary transition-colors duration-200"
-                >
-                  {link.name}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h4 className="text-xl font-semibold mb-4 text-primary">Follow Us</h4>
-          <div className="flex space-x-4">
-            {footerContent.socialLinks.map((link) => {
-              const IconComponent = iconMap[link.icon];
-              return (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-light hover:text-primary transition-colors duration-200 text-2xl"
-                  aria-label={link.name}
-                >
-                  <IconComponent />
-                </a>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-      <div className="border-t border-gray-700 mt-10 pt-6 text-center text-sm text-gray-400">
-        {footerContent.copyright}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="border-t border-offwhite/20 mt-10 pt-6 text-center text-sm text-offwhite/70"
+        >
+          {footerContent.copyright || `© ${new Date().getFullYear()} Mumbai Real Estate. All rights reserved.`}
+        </motion.div>
       </div>
     </footer>
   );

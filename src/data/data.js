@@ -1,9 +1,9 @@
 /* src/data/data.js */
 export const navLinks = [
   { name: 'Home', href: '#home' },
-  { name: 'Properties', href: '#properties' },
   { name: 'Features', href: '#features' },
-  { name: 'Testimonials', href: '#testimonials' },
+  { name: 'Properties', href: '#properties' },
+  // { name: 'Testimonials', href: '#testimonials' },
   { name: 'Contact', href: '#contact' },
 ];
 
