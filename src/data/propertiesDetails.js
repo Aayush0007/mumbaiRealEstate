@@ -29,11 +29,11 @@ const propertiesDetails = {
         'Sustainable design with rainwater harvesting',
       ],
       plans: [
-        { type: '2 BHK with Deck', image: 'https://www.lodhagroup.com/sites/default/files/styles/webp/public/2024-10/2-BHK-WITH-DECK-2000-X-1111.jpg.webp?itok=qHst0u4z' },
-        { type: '3 BHK Unit Plan', image: 'https://www.lodhagroup.com/sites/default/files/styles/webp/public/2024-10/3-BHK-WITH-DECK-2000-X-1111.jpg.webp?itok=aRQFlWi6' },
-        { type: 'Typical Floor Plan 1', image: 'https://www.lodhagroup.com/sites/default/files/nearbyicons/TYPICAL-FLOOR-PLAN-W-43-2000-X-1111.jpg' },
-        { type: 'Typical Floor Plan 2', image: 'https://www.lodhagroup.com/sites/default/files/nearbyicons/TYPICAL-FLOOR-PLAN-W-47-2000-X-1111.jpg' },
-        { type: 'Master Plan', image: 'https://www.lodhagroup.com/sites/default/files/styles/master_plan_1237x687_/public/2025-03/1237X687_Master-plan-adapt-for-Lodha-Amara..jpg.webp?itok=1K0tu7jl' },
+        { type: '2 BHK with Deck', mediaType: 'image', url: 'https://www.lodhagroup.com/sites/default/files/styles/webp/public/2024-10/2-BHK-WITH-DECK-2000-X-1111.jpg.webp?itok=qHst0u4z' },
+        { type: '3 BHK Unit Plan', mediaType: 'image', url: 'https://www.lodhagroup.com/sites/default/files/styles/webp/public/2024-10/3-BHK-WITH-DECK-2000-X-1111.jpg.webp?itok=aRQFlWi6' },
+        { type: 'Typical Floor Plan 1', mediaType: 'image', url: 'https://www.lodhagroup.com/sites/default/files/nearbyicons/TYPICAL-FLOOR-PLAN-W-43-2000-X-1111.jpg' },
+        { type: 'Typical Floor Plan 2', mediaType: 'image', url: 'https://www.lodhagroup.com/sites/default/files/nearbyicons/TYPICAL-FLOOR-PLAN-W-47-2000-X-1111.jpg' },
+        { type: 'Master Plan', mediaType: 'image', url: 'https://www.lodhagroup.com/sites/default/files/styles/master_plan_1237x687_/public/2025-03/1237X687_Master-plan-adapt-for-Lodha-Amara..jpg.webp?itok=1K0tu7jl' },
       ],
     },
     pricing: {
