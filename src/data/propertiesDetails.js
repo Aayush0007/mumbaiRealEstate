@@ -1,7 +1,19 @@
+import LodhaLogo from '../assets/LodhaAmaraLogo.jpg';
+import L2 from '../assets/LP6.png';
+import L1 from '../assets/L1.png';
+import L3 from '../assets/L3.png';
+import L4 from '../assets/L4.png';
+import L5 from '../assets/L5.png';
+import L6 from '../assets/L6.png';
+import L7 from '../assets/L7.png';
+import L8 from '../assets/HeroSection.png';
+import L9 from '../assets/L9.png';
+import L10 from '../assets/L10.png';
+
 const propertiesDetails = {
   lodhaAmara: {
     projectSummary: {
-      logo: 'https://ik.imagekit.io/pwh9ahxpa/ChatGPT%20Image%20Jun%203,%202025,%2010_38_57%20AM.png?updatedAt=1748927422163',
+      logo: LodhaLogo,
       name: 'Lodha Amara',
       tagline: 'Do more, live more',
       description:
@@ -95,16 +107,16 @@ const propertiesDetails = {
       ],
     },
     gallery: [
-      'https://www.lodhagroup.com/sites/default/files/gallery/grid/1000x480_Amara_clubhouse_0.jpg',
-      'https://www.lodhagroup.com/sites/default/files/gallery/grid/1000x480_Amara_cycle_0.jpg',
-      'https://www.lodhagroup.com/sites/default/files/gallery/grid/1000x480_Amara_library.jpg',
-      'https://www.lodhagroup.com/sites/default/files/gallery/grid/1000x480_Amara_sports_0.jpg',
-      'https://www.lodhagroup.com/sites/default/files/gallery/grid/1000x480_Amara_treehouse_0.jpg',
-      'https://www.lodhagroup.com/sites/default/files/gallery/grid/1000x480_Amara_temple_0.jpg',
-      'https://www.lodhagroup.com/sites/default/files/gallery/grid/1000x480_Amara_yoga_0.jpg',
-      'https://www.lodhagroup.com/sites/default/files/gallery/grid/2_0.png',
-      'https://www.lodhagroup.com/sites/default/files/gallery/grid/3_0.png',
-      'https://www.lodhagroup.com/sites/default/files/gallery/grid/1000X480_Evoq_pool%201.png',
+      L8,
+      L2,
+      L4,
+      L5,
+      L7,
+      L3,
+      L6,
+      L9,
+      L1,
+      L10,
     ],
     benefits: [
       'Prime location with excellent connectivity',

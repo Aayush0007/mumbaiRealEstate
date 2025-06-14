@@ -1,12 +1,12 @@
 import propertiesDetails from './propertiesDetails';
-
+import LodhaImg from '../assets/LP6.png';
 const developers = [
    {
     name: 'Lodha Amara',
     properties: [
       {
         id: 1,
-        image: 'https://ik.imagekit.io/pwh9ahxpa/LP6.webp?updatedAt=1748926467952', // Replace with actual image link provided
+        image: LodhaImg, 
         address: 'Lodha Amara, Kolshet Road, Thane West, Thane, Maharashtra 400607',
         price: '₹1.40 Cr. - ₹1.80 Cr.+',
         description:
