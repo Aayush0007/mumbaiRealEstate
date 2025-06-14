@@ -86,7 +86,7 @@ const GallerySection = ({ gallery }) => {
         <motion.img
           key={currentImage}
           src={gallery[currentImage]}
-          alt={`Luxury Property Gallery Image ${currentImage + 1} - Haven Global Living`}
+          alt={`Luxury Property Gallery Image ${currentImage + 1} - Living Luxura`}
           loading="lazy"
           className="w-full h-[500px] object-cover rounded-xl shadow-lg"
           initial={{ opacity: 0, scale: 0.95 }}
@@ -319,7 +319,7 @@ const ProjectDetails = ({ project, onBack }) => {
   const { id } = useParams();
 
   const shareUrl = `${window.location.origin}/properties/${id}`;
-  const shareText = `Check out ${project.projectSummary.name} - ${project.projectSummary.tagline}! A luxurious property in Thane by Haven Global Living.`;
+  const shareText = `Check out ${project.projectSummary.name} - ${project.projectSummary.tagline}! A luxurious property in Thane by Living Luxura.`;
 
   const shareLinks = [
     {
@@ -483,7 +483,7 @@ const ProjectDetails = ({ project, onBack }) => {
         >
           <img
             src={project.projectSummary.logo}
-            alt={`${project.projectSummary.name} Logo - Haven Global Living`}
+            alt={`${project.projectSummary.name} Logo - Living Luxura`}
             loading="lazy"
             className="w-32 h-32 mx-auto mb-4 rounded-full border-2 border-blue-600 shadow-lg object-cover"
           />
@@ -832,7 +832,7 @@ const ProjectDetails = ({ project, onBack }) => {
           className="text-center"
         >
           <h3 className="text-4xl font-cinzel font-semibold text-dark mb-6">
-            Take the Next Step with Haven Global Living
+            Take the Next Step with Living Luxura
           </h3>
           <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
             {project.ctaOptions.map((cta, index) => (

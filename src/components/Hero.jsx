@@ -5,8 +5,8 @@ import Section from './common/Section';
 import HeroSection from "../assets/HeroSection.png";
 
 // Simulated SEO meta tags (typically in index.html head)
-{/* <meta name="description" content="Discover luxury homes in 2025 with Haven Global Living. Find modern living spaces, dream properties, and exclusive real estate in prime city locations." /> */}
-{/* <meta name="keywords" content="luxury homes 2025, modern living spaces, dream properties, exclusive real estate, Haven Global Living, luxury apartments, penthouses, villas, city living" /> */}
+{/* <meta name="description" content="Discover luxury homes in 2025 with Living Luxura. Find modern living spaces, dream properties, and exclusive real estate in prime city locations." /> */}
+{/* <meta name="keywords" content="luxury homes 2025, modern living spaces, dream properties, exclusive real estate, Living Luxura, luxury apartments, penthouses, villas, city living" /> */}
 
 const Hero = () => {
   const { scrollY } = useScroll();
@@ -44,7 +44,7 @@ const Hero = () => {
           transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
           className="text-lg md:text-2xl font-sans font-light tracking-wide mb-4 opacity-90 text-white drop-shadow-lg"
         >
-          Discover your dream property in the heart of the city with Haven Global Living.
+          Discover your dream property in the heart of the city with Living Luxura.
         </motion.p>
 
         <motion.p
@@ -70,7 +70,7 @@ const Hero = () => {
             Explore Dream Properties
           </Button>
           <Button
-            href="https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20schedule%20a%20tour%20with%20Haven%20Global%20Living."
+            href="https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20schedule%20a%20tour%20with%Living%20Luxura%20Living."
             target="_blank"
             rel="noopener noreferrer"
             className="text-lg font-cinzel font-medium px-8 py-3 border-2 border-white text-white hover:bg-white hover:text-dark rounded-md transition-all duration-300"
