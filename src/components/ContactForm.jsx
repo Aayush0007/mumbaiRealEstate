@@ -3,7 +3,6 @@ import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Button from './common/Button';
 import Section from './common/Section';
-import PropertyLocation from './PropertyLocation';
 
 // Simulated SEO meta tags (typically in index.html head)
 {/* <meta name="description" content="Contact Living Luxura to explore luxury properties in Thane 2025. Schedule a property tour, inquire about exclusive homes, or connect with our real estate experts at livingluxura.com." /> */}
@@ -200,7 +199,6 @@ const ContactForm = () => {
         transition={{ duration: 0.5 }}
         className="container mx-auto px-6 relative z-10"
       >
-        <PropertyLocation />
 
         <motion.h2
           initial={{ opacity: 0, y: -50 }}

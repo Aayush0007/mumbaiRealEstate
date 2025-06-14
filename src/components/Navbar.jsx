@@ -1,17 +1,18 @@
-/* src/components/Navbar.jsx */
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { navLinks } from "../data/data";
 import { FaBars, FaTimes, FaWhatsapp } from "react-icons/fa";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../assets/Logo.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  // Detect scroll to toggle navbar background
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -20,7 +21,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Animation variants for nav links
   const linkVariants = {
     hidden: { opacity: 0, y: -20 },
     visible: (i) => ({
@@ -35,7 +35,6 @@ const Navbar = () => {
     },
   };
 
-  // Animation for mobile menu
   const mobileMenuVariants = {
     hidden: { x: "100%", opacity: 0 },
     visible: {
@@ -48,6 +47,32 @@ const Navbar = () => {
       opacity: 0,
       transition: { duration: 0.3, ease: "easeIn" },
     },
+  };
+
+  const handleNavClick = (href) => {
+    setIsOpen(false); // Close mobile menu if open
+
+    if (href.startsWith("#")) {
+      // If on the homepage, scroll to the section
+      if (location.pathname === "/") {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      } else {
+        // If on a different page, navigate to the homepage and scroll to the section
+        navigate("/");
+        setTimeout(() => {
+          const element = document.querySelector(href);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 100);
+      }
+    } else {
+      // For non-hash links, navigate directly
+      navigate(href);
+    }
   };
 
   return (
@@ -63,24 +88,24 @@ const Navbar = () => {
     >
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center space-x-3">
-          <motion.a
-            href="#home"
-            aria-label="Living Luxura Home"
+          <motion.div
             whileHover={{ rotate: 10, scale: 1.1 }}
             transition={{ type: "spring", stiffness: 200 }}
           >
-            <img
-              src={Logo}
-              alt="Living Luxura Logo"
-              className="h-8 sm:h-10 md:h-12 object-contain"
-            />
-          </motion.a>
-          <a
-            href="#home"
+            <Link to="/">
+              <img
+                src={Logo}
+                alt="Living Luxura Logo"
+                className="h-8 sm:h-10 md:h-12 object-contain"
+              />
+            </Link>
+          </motion.div>
+          <Link
+            to="/"
             className="text-lg sm:text-xl md:text-2xl font-cinzel font-bold text-white hover:text-blue-400 transition-colors duration-300"
           >
             Living Luxura
-          </a>
+          </Link>
         </div>
         <div className="flex items-center space-x-4 sm:space-x-6">
           <ul className="hidden md:flex space-x-8 lg:space-x-10">
@@ -94,8 +119,8 @@ const Navbar = () => {
                 whileHover="hover"
                 className="relative"
               >
-                <a
-                  href={link.href}
+                <button
+                  onClick={() => handleNavClick(link.href)}
                   className="text-white font-cinzel font-medium text-lg tracking-wider"
                 >
                   {link.name}
@@ -105,7 +130,7 @@ const Navbar = () => {
                     whileHover={{ scaleX: 1 }}
                     transition={{ duration: 0.3 }}
                   />
-                </a>
+                </button>
               </motion.li>
             ))}
           </ul>
@@ -119,7 +144,7 @@ const Navbar = () => {
               boxShadow: "0 0 15px rgba(59, 130, 246, 0.5)",
             }}
           >
-            <FaWhatsapp className="text-lg" /> {/* WhatsApp Icon */}
+            <FaWhatsapp className="text-lg" />
             Get Started
           </motion.a>
           <button
@@ -158,13 +183,12 @@ const Navbar = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.5 }}
                 >
-                  <a
-                    href={link.href}
-                    onClick={toggleMenu}
+                  <button
+                    onClick={() => handleNavClick(link.href)}
                     className="text-white hover:text-blue-400 transition-colors duration-300 font-cinzel font-medium text-xl tracking-wider drop-shadow-md"
                   >
                     {link.name}
-                  </a>
+                  </button>
                 </motion.li>
               ))}
               <motion.li
@@ -182,7 +206,7 @@ const Navbar = () => {
                     boxShadow: "0 0 15px rgba(59, 130, 246, 0.5)",
                   }}
                 >
-                  <FaWhatsapp className="text-lg" /> {/* WhatsApp Icon */}
+                  <FaWhatsapp className="text-lg" />
                   Get Started
                 </motion.a>
               </motion.li>

@@ -21,7 +21,7 @@ const Home = () => {
             <Hero />
             <AboutUs /> {/* Add the About Us section */}
             <Properties />
-            {/* <PropertyLocation /> */}
+            <PropertyLocation />
             <ContactForm />
             <Popup />
           </Suspense>

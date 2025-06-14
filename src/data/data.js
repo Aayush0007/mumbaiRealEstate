@@ -1,7 +1,7 @@
 /* src/data/data.js */
 export const navLinks = [
   { name: 'Home', href: '#home' },
-  { name: 'Features', href: '#features' },
+  { name: 'About Us', href: '#about' },
   { name: 'Properties', href: '#properties' },
   { name: 'Location', href: '#location' },
   // { name: 'Testimonials', href: '#testimonials' },

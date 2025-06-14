@@ -1,4 +1,3 @@
-/* src/components/Footer.jsx */
 import { motion } from "framer-motion";
 import {
   FaFacebook,
@@ -12,6 +11,7 @@ import {
 import { footerContent, navLinks } from "../data/data";
 import { useTheme } from "../context/ThemeContext";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const iconMap = {
   FaFacebook,
@@ -101,11 +101,36 @@ const CompanyInfo = ({ companyName, address, phone, email, tagline }) => {
 
 const QuickLinks = ({ links }) => {
   const { theme } = useTheme();
+  const navigate = useNavigate();
   const additionalLinks = [
     { name: "Privacy Policy", href: "/privacy-policy" },
     { name: "Terms of Service", href: "/terms-of-service" },
   ];
   const allLinks = [...links, ...additionalLinks];
+
+  const handleLinkClick = (href) => {
+    if (href.startsWith("#")) {
+      // If on the homepage, scroll to the section
+      if (window.location.pathname === "/") {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      } else {
+        // If on a different page, navigate to the homepage and scroll to the section
+        navigate("/");
+        setTimeout(() => {
+          const element = document.querySelector(href);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 100);
+      }
+    } else {
+      // For non-hash links, navigate directly
+      navigate(href);
+    }
+  };
 
   return (
     <section aria-label="Quick Links">
@@ -128,15 +153,15 @@ const QuickLinks = ({ links }) => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <a
-                href={link.href}
+              <button
+                onClick={() => handleLinkClick(link.href)}
                 className="text-gray-300 hover:text-blue-400 transition-colors duration-200 text-sm font-sans"
                 aria-current={
                   window.location.pathname === link.href ? "page" : undefined
                 }
               >
                 {link.name}
-              </a>
+              </button>
             </motion.li>
           ))}
         </ul>
@@ -158,7 +183,6 @@ const Newsletter = () => {
     }
 
     setIsSubmitting(true);
-    // Simulate API call for newsletter subscription
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setEmail("");
     setMessage("Subscribed successfully! Stay tuned for updates.");
@@ -336,7 +360,6 @@ const Footer = () => {
     },
   ];
 
-  // Structured Data for SEO
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -364,7 +387,6 @@ const Footer = () => {
       className="bg-gray-900 text-gray-300 py-12 md:py-16 relative overflow-hidden"
       aria-label="Website Footer"
     >
-      {/* Structured Data for SEO */}
       <script type="application/ld+json">
         {JSON.stringify(structuredData)}
       </script>

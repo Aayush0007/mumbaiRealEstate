@@ -1,4 +1,3 @@
-/* src/components/Popup.jsx */
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTimes } from 'react-icons/fa';
@@ -10,6 +9,9 @@ const Popup = () => {
     name: '',
     phone: '',
     email: '',
+    lookingFor: '',
+    buyingPlan: '',
+    message: '',
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,7 +19,7 @@ const Popup = () => {
   const popupRef = useRef(null);
   const firstInputRef = useRef(null);
 
-  // Show close icon after 3 seconds
+  // Show close icon after 5 seconds
   useEffect(() => {
     const timer = setTimeout(() => setShowClose(true), 5000);
     return () => clearTimeout(timer);
@@ -50,6 +52,9 @@ const Popup = () => {
     if (name === 'email' && value.trim()) {
       if (!/\S+@\S+\.\S+/.test(value)) return 'Invalid email format';
     }
+    if (name === 'lookingFor' && !value) return 'Please select an option';
+    if (name === 'buyingPlan' && !value) return 'Please select an option';
+    if (name === 'message' && value.length > 500) return 'Message cannot exceed 500 characters';
     return '';
   };
 
@@ -67,7 +72,7 @@ const Popup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
-    ['name', 'phone', 'email'].forEach((field) => {
+    ['name', 'phone', 'email', 'lookingFor', 'buyingPlan', 'message'].forEach((field) => {
       newErrors[field] = validateField(field, formData[field]);
     });
 
@@ -87,7 +92,7 @@ const Popup = () => {
       });
       const result = await response.json();
       if (result.status === 'success') {
-        setFormData({ name: '', phone: '', email: '' });
+        setFormData({ name: '', phone: '', email: '', lookingFor: '', buyingPlan: '', message: '' });
         setErrors({});
         setSuccess(true);
         setTimeout(() => {
@@ -125,7 +130,7 @@ const Popup = () => {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           transition={{ duration: 0.5, type: "spring" }}
-          className="relative bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-lg max-w-md w-full mx-4 border border-gray-100"
+          className="relative bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-lg max-w-md w-full mx-4 border border-gray-100 max-h-[90vh] overflow-y-auto"
         >
           {showClose && (
             <motion.button
@@ -229,7 +234,7 @@ const Popup = () => {
                 htmlFor="popup-phone"
                 className="block text-dark text-sm font-semibold mb-1 font-sans"
               >
-                Phone <span className="text-red-500">*</span>
+                Mobile No. <span className="text-red-500">*</span>
               </label>
               <input
                 type="tel"
@@ -295,6 +300,149 @@ const Popup = () => {
                   className="text-red-500 text-xs mt-1"
                 >
                   {errors.email}
+                </motion.p>
+              )}
+            </div>
+
+            <div>
+              <label
+                className="block text-dark text-sm font-semibold mb-1 font-sans"
+              >
+                You are looking for <span className="text-red-500">*</span>
+              </label>
+              <div className="flex space-x-4">
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="lookingFor"
+                    value="Property to Buy"
+                    checked={formData.lookingFor === "Property to Buy"}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="mr-2"
+                    required
+                  />
+                  <span className="text-dark text-sm font-sans">Property to Buy</span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="lookingFor"
+                    value="Property For Investment"
+                    checked={formData.lookingFor === "Property For Investment"}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="mr-2"
+                    required
+                  />
+                  <span className="text-dark text-sm font-sans">Property For Investment</span>
+                </label>
+              </div>
+              {errors.lookingFor && (
+                <motion.p
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="text-red-500 text-xs mt-1"
+                >
+                  {errors.lookingFor}
+                </motion.p>
+              )}
+            </div>
+
+            <div>
+              <label
+                className="block text-dark text-sm font-semibold mb-1 font-sans"
+              >
+                When are you planning to buy property <span className="text-red-500">*</span>
+              </label>
+              <div className="flex flex-wrap space-x-4">
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="buyingPlan"
+                    value="Soon"
+                    checked={formData.buyingPlan === "Soon"}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="mr-2"
+                    required
+                  />
+                  <span className="text-dark text-sm font-sans">Soon</span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="buyingPlan"
+                    value="Within 4 - 6 Months"
+                    checked={formData.buyingPlan === "Within 4 - 6 Months"}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="mr-2"
+                    required
+                  />
+                  <span className="text-dark text-sm font-sans">Within 4 - 6 Months</span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="buyingPlan"
+                    value="Just Looking"
+                    checked={formData.buyingPlan === "Just Looking"}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="mr-2"
+                    required
+                  />
+                  <span className="text-dark text-sm font-sans">Just Looking</span>
+                </label>
+              </div>
+              {errors.buyingPlan && (
+                <motion.p
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="text-red-500 text-xs mt-1"
+                >
+                  {errors.buyingPlan}
+                </motion.p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="popup-message"
+                className="block text-dark text-sm font-semibold mb-1 font-sans"
+              >
+                Message (Optional)
+              </label>
+              <textarea
+                id="popup-message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className={`w-full py-2 px-3 rounded-lg bg-white/80 text-dark shadow-md focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+                  errors.message
+                    ? "border-2 border-red-500"
+                    : "border border-gray-200"
+                }`}
+                placeholder="Your message or additional details..."
+                rows="3"
+                aria-invalid={!!errors.message}
+                aria-describedby={
+                  errors.message ? "popup-message-error" : undefined
+                }
+              />
+              <p className="text-dark/80 text-xs mt-1 font-sans">
+                {formData.message.length}/500 characters
+              </p>
+              {errors.message && (
+                <motion.p
+                  id="popup-message-error"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="text-red-500 text-xs mt-1"
+                >
+                  {errors.message}
                 </motion.p>
               )}
             </div>

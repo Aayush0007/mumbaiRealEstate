@@ -1,7 +1,6 @@
-/* src/components/ProjectDetails.jsx */
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "./common/Button";
 
 const AmenitiesSection = ({ amenities }) => {
@@ -253,6 +252,8 @@ const FaqSection = ({ faqs }) => {
 };
 
 const QuickLinksSidebar = () => {
+  const [isMinimized, setIsMinimized] = useState(false);
+
   const sections = [
     { name: "Property Details", href: "#property-details" },
     { name: "Pricing", href: "#pricing" },
@@ -271,46 +272,54 @@ const QuickLinksSidebar = () => {
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
-      className="hidden lg:block fixed top-32 right-8 w-64 bg-white/80 backdrop-blur-md p-4 rounded-xl shadow-lg border border-gray-100"
+      className={`fixed top-32 right-8 bg-white/80 backdrop-blur-md p-4 rounded-xl shadow-lg border border-gray-100 transition-all duration-300 ${
+        isMinimized ? "w-12" : "w-64"
+      } lg:block hidden`}
     >
-      <h4 className="text-lg font-cinzel font-semibold text-dark mb-4">Quick Links</h4>
-      <ul className="space-y-2">
-        {sections.map((section, index) => (
-          <li key={index}>
-            <a
-              href={section.href}
-              className="text-dark/80 hover:text-blue-600 text-sm font-sans transition-colors duration-300"
-            >
-              {section.name}
-            </a>
-          </li>
-        ))}
-      </ul>
+      <div className="flex justify-between items-center mb-4">
+        {!isMinimized && (
+          <h4 className="text-lg font-cinzel font-semibold text-dark">Quick Links</h4>
+        )}
+        <button
+          onClick={() => setIsMinimized(!isMinimized)}
+          className="text-dark focus:outline-none"
+          aria-label={isMinimized ? "Maximize Quick Links" : "Minimize Quick Links"}
+        >
+          {isMinimized ? (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+            </svg>
+          ) : (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          )}
+        </button>
+      </div>
+      {!isMinimized && (
+        <ul className="space-y-2">
+          {sections.map((section, index) => (
+            <li key={index}>
+              <a
+                href={section.href}
+                className="text-dark/80 hover:text-blue-600 text-sm font-sans transition-colors duration-300"
+              >
+                {section.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
     </motion.div>
   );
 };
 
 const ProjectDetails = ({ project, onBack }) => {
   const navigate = useNavigate();
-  const {
-    projectSummary,
-    details,
-    pricing,
-    amenities,
-    gallery,
-    benefits,
-    location,
-    specifications,
-    virtualTour,
-    ctaOptions,
-    rera,
-    faqs,
-  } = project;
+  const { id } = useParams();
 
-  const shareUrl = `${window.location.origin}/properties/${projectSummary.name
-    .toLowerCase()
-    .replace(/\s+/g, "-")}`;
-  const shareText = `Check out ${projectSummary.name} - ${projectSummary.tagline}! A luxurious property in Thane by Haven Global Living.`;
+  const shareUrl = `${window.location.origin}/properties/${id}`;
+  const shareText = `Check out ${project.projectSummary.name} - ${project.projectSummary.tagline}! A luxurious property in Thane by Haven Global Living.`;
 
   const shareLinks = [
     {
@@ -340,7 +349,7 @@ const ProjectDetails = ({ project, onBack }) => {
       url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
         shareUrl
       )}&title=${encodeURIComponent(
-        projectSummary.name
+        project.projectSummary.name
       )}&summary=${encodeURIComponent(shareText)}`,
     },
     {
@@ -362,22 +371,37 @@ const ProjectDetails = ({ project, onBack }) => {
     alert("Link copied to clipboard!");
   };
 
+  const handleNavigation = (functionality) => {
+    if (functionality === "#contact") {
+      // Navigate to the homepage and scroll to #contact
+      navigate("/");
+      setTimeout(() => {
+        const element = document.querySelector("#contact");
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    } else if (functionality === "whatsapp") {
+      // Redirect to WhatsApp
+      window.location.href = "https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20schedule%20a%20visit%20for%20a%20luxury%20property%20in%20Thane%20-%20livingluxura.com";
+    }
+  };
+
   return (
     <div className="relative">
-      {/* Hero Banner */}
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         className="relative h-[500px] bg-cover bg-center mb-12"
-        style={{ backgroundImage: `url(${gallery[0]})` }}
+        style={{ backgroundImage: `url(${project.gallery[0]})` }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-dark/90 to-transparent flex items-center justify-center">
           <div className="text-center text-white">
             <h1 className="text-5xl md:text-6xl font-cinzel font-bold mb-4">
-              {projectSummary.name} - Luxury Living in Thane 2025
+              {project.projectSummary.name} - Luxury Living in Thane 2025
             </h1>
-            <p className="text-xl font-sans">{projectSummary.tagline}</p>
+            <p className="text-xl font-sans">{project.projectSummary.tagline}</p>
           </div>
         </div>
       </motion.div>
@@ -458,22 +482,22 @@ const ProjectDetails = ({ project, onBack }) => {
           className="text-center mb-16"
         >
           <img
-            src={projectSummary.logo}
-            alt={`${projectSummary.name} Logo - Haven Global Living`}
+            src={project.projectSummary.logo}
+            alt={`${project.projectSummary.name} Logo - Haven Global Living`}
             loading="lazy"
             className="w-32 h-32 mx-auto mb-4 rounded-full border-2 border-blue-600 shadow-lg object-cover"
           />
           <h2 className="text-4xl md:text-5xl font-cinzel font-bold text-dark mb-2 tracking-wide">
-            {projectSummary.name}
+            {project.projectSummary.name}
           </h2>
           <p className="text-xl text-blue-600 font-sans mb-4">
-            {projectSummary.tagline}
+            {project.projectSummary.tagline}
           </p>
           <p className="text-dark/80 text-base max-w-3xl mx-auto font-sans">
-            {projectSummary.description}
+            {project.projectSummary.description}
           </p>
           <ul className="flex flex-wrap justify-center gap-4 mt-6">
-            {projectSummary.highlights.map((highlight, index) => (
+            {project.projectSummary.highlights.map((highlight, index) => (
               <motion.li
                 key={index}
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -503,7 +527,7 @@ const ProjectDetails = ({ project, onBack }) => {
             <h4 className="text-xl font-cinzel font-medium text-blue-600 mb-2">
               Overview
             </h4>
-            <p className="text-dark/80 text-sm mb-4 font-sans">{details.overview}</p>
+            <p className="text-dark/80 text-sm mb-4 font-sans">{project.details.overview}</p>
             <h4 className="text-xl font-cinzel font-medium text-blue-600 mb-2">
               Configuration
             </h4>
@@ -523,7 +547,7 @@ const ProjectDetails = ({ project, onBack }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {details.configuration.map((config, index) => (
+                  {project.details.configuration.map((config, index) => (
                     <tr
                       key={index}
                       className="border-b border-gray-200/50 hover:bg-gray-50"
@@ -540,7 +564,7 @@ const ProjectDetails = ({ project, onBack }) => {
               Floor Plans
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {details.plans.map((plan, index) => (
+              {project.details.plans.map((plan, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -552,7 +576,7 @@ const ProjectDetails = ({ project, onBack }) => {
                   {plan.mediaType === "image" ? (
                     <img
                       src={plan.url}
-                      alt={`${plan.type} Floor Plan - ${projectSummary.name}`}
+                      alt={`${plan.type} Floor Plan - ${project.projectSummary.name}`}
                       loading="lazy"
                       className="w-full h-40 object-cover rounded-md mb-2"
                     />
@@ -561,7 +585,7 @@ const ProjectDetails = ({ project, onBack }) => {
                       src={`https://www.youtube.com/embed/${
                         plan.url.split("v=")[1].split("&")[0]
                       }`}
-                      title={`${plan.type} Video - ${projectSummary.name}`}
+                      title={`${plan.type} Video - ${project.projectSummary.name}`}
                       className="w-full h-40 rounded-md mb-2"
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -578,7 +602,7 @@ const ProjectDetails = ({ project, onBack }) => {
               Features
             </h4>
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {details.features.map((feature, index) => (
+              {project.details.features.map((feature, index) => (
                 <li key={index} className="text-dark/80 text-sm flex items-center">
                   <span className="w-2 h-2 bg-blue-600 rounded-full mr-2" />
                   {feature}
@@ -616,7 +640,7 @@ const ProjectDetails = ({ project, onBack }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {pricing.pricingTable.map((row, index) => (
+                  {project.pricing.pricingTable.map((row, index) => (
                     <tr
                       key={index}
                       className="border-b border-gray-200/50 hover:bg-gray-50"
@@ -631,7 +655,7 @@ const ProjectDetails = ({ project, onBack }) => {
                 </tbody>
               </table>
             </div>
-            {pricing.offers && (
+            {project.pricing.offers && (
               <motion.div
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -643,7 +667,7 @@ const ProjectDetails = ({ project, onBack }) => {
                   Special Offers
                 </h4>
                 <ul className="space-y-2">
-                  {pricing.offers.map((offer, index) => (
+                  {project.pricing.offers.map((offer, index) => (
                     <li
                       key={index}
                       className="text-dark/80 text-sm flex items-center"
@@ -659,10 +683,10 @@ const ProjectDetails = ({ project, onBack }) => {
         </motion.div>
 
         <div id="amenities">
-          <AmenitiesSection amenities={amenities} />
+          <AmenitiesSection amenities={project.amenities} />
         </div>
         <div id="gallery">
-          <GallerySection gallery={gallery} />
+          <GallerySection gallery={project.gallery} />
         </div>
 
         <motion.div
@@ -678,7 +702,7 @@ const ProjectDetails = ({ project, onBack }) => {
           </h3>
           <div className="bg-white/80 backdrop-blur-md p-6 rounded-xl shadow-lg border border-gray-100">
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {benefits.map((benefit, index) => (
+              {project.benefits.map((benefit, index) => (
                 <li key={index} className="text-dark/80 text-sm flex items-center">
                   <span className="w-2 h-2 bg-blue-600 rounded-full mr-2" />
                   {benefit}
@@ -700,9 +724,9 @@ const ProjectDetails = ({ project, onBack }) => {
             Prime Location in Thane
           </h3>
           <div className="bg-white/80 backdrop-blur-md p-6 rounded-xl shadow-lg border border-gray-100">
-            <p className="text-dark/80 font-cinzel mb-2">{location.address}</p>
+            <p className="text-dark/80 font-cinzel mb-2">{project.location.address}</p>
             <p className="text-dark/80 text-sm max-w-2xl mb-6 font-sans">
-              {location.description}
+              {project.location.description}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
@@ -710,7 +734,7 @@ const ProjectDetails = ({ project, onBack }) => {
                   Connectivity
                 </h4>
                 <ul className="space-y-3">
-                  {location.connectivity.map((item, index) => (
+                  {project.location.connectivity.map((item, index) => (
                     <li
                       key={index}
                       className="text-dark/80 text-sm flex items-center"
@@ -726,7 +750,7 @@ const ProjectDetails = ({ project, onBack }) => {
                   Nearby Landmarks
                 </h4>
                 <ul className="space-y-3">
-                  {location.nearbyLandmarks.map((item, index) => (
+                  {project.location.nearbyLandmarks.map((item, index) => (
                     <li key={index} className="text-dark/80 text-sm">
                       <span className="font-medium font-sans">{item.category}:</span>{" "}
                       {item.names.join(", ")}
@@ -753,28 +777,28 @@ const ProjectDetails = ({ project, onBack }) => {
             <ul className="space-y-3">
               <li className="text-dark/80 text-sm">
                 <span className="font-medium font-sans">Flooring:</span>{" "}
-                {specifications.flooring}
+                {project.specifications.flooring}
               </li>
               <li className="text-dark/80 text-sm">
                 <span className="font-medium font-sans">Kitchen:</span>{" "}
-                {specifications.kitchen}
+                {project.specifications.kitchen}
               </li>
               <li className="text-dark/80 text-sm">
-                <span className="font-medium font-sans">Doors:</span> {specifications.doors}
+                <span className="font-medium font-sans">Doors:</span> {project.specifications.doors}
               </li>
               <li className="text-dark/80 text-sm">
                 <span className="font-medium font-sans">Electrical:</span>{" "}
-                {specifications.electrical}
+                {project.specifications.electrical}
               </li>
             </ul>
           </div>
         </motion.div>
 
         <div id="rera">
-          <ReraSection rera={rera} />
+          <ReraSection rera={project.rera} />
         </div>
         <div id="faqs">
-          <FaqSection faqs={faqs} />
+          <FaqSection faqs={project.faqs} />
         </div>
 
         <motion.div
@@ -789,9 +813,9 @@ const ProjectDetails = ({ project, onBack }) => {
             Experience a Virtual Tour
           </h3>
           <div className="bg-white/80 backdrop-blur-md p-6 rounded-xl shadow-lg border border-gray-100 text-center">
-            <p className="text-dark/80 text-sm mb-4 font-sans">{virtualTour.description}</p>
+            <p className="text-dark/80 text-sm mb-4 font-sans">{project.virtualTour.description}</p>
             <Button
-              href={virtualTour.link}
+              href={project.virtualTour.link}
               className="px-6 py-2 text-sm bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-md hover:shadow-lg"
               aria-label="Take a Virtual Tour"
             >
@@ -811,10 +835,10 @@ const ProjectDetails = ({ project, onBack }) => {
             Take the Next Step with Haven Global Living
           </h3>
           <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-            {ctaOptions.map((cta, index) => (
+            {project.ctaOptions.map((cta, index) => (
               <Button
                 key={index}
-                href={cta.functionality}
+                onClick={() => handleNavigation(cta.functionality)}
                 className="px-8 py-3 text-base bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-md hover:shadow-lg"
                 aria-label={cta.type}
               >
