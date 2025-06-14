@@ -110,14 +110,12 @@ const QuickLinks = ({ links }) => {
 
   const handleLinkClick = (href) => {
     if (href.startsWith("#")) {
-      // If on the homepage, scroll to the section
       if (window.location.pathname === "/") {
         const element = document.querySelector(href);
         if (element) {
           element.scrollIntoView({ behavior: "smooth" });
         }
       } else {
-        // If on a different page, navigate to the homepage and scroll to the section
         navigate("/");
         setTimeout(() => {
           const element = document.querySelector(href);
@@ -127,7 +125,6 @@ const QuickLinks = ({ links }) => {
         }, 100);
       }
     } else {
-      // For non-hash links, navigate directly
       navigate(href);
     }
   };
@@ -183,11 +180,28 @@ const Newsletter = () => {
     }
 
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setEmail("");
-    setMessage("Subscribed successfully! Stay tuned for updates.");
-    setIsSubmitting(false);
-    setTimeout(() => setMessage(""), 3000);
+    try {
+      const response = await fetch('/api/macros/s/AKfycbyr133OjKZOsaih_3CQIyWpK_zuP7fFecDvaaSAD6Z1qsNZRFWfAGFrcGvOR1pnsjjxhQ/exec', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, formType: 'newsletter' }),
+      });
+      const result = await response.json();
+      if (result.status === 'success') {
+        setEmail("");
+        setMessage("Subscribed successfully! Stay tuned for updates.");
+        setTimeout(() => setMessage(""), 3000);
+      } else {
+        throw new Error(result.message || 'Failed to subscribe');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setMessage("Failed to subscribe. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -330,28 +344,11 @@ const Footer = () => {
         "https://www.facebook.com/livingluxura",
     },
     {
-      name: "Twitter",
-      icon: "FaTwitter",
-      href:
-        footerContent.socialLinks.find((l) => l.name === "Twitter")?.href ||
-        "https://www.twitter.com/LivingLuxura",
-    },
-    {
       name: "Instagram",
       icon: "FaInstagram",
       href:
         footerContent.socialLinks.find((l) => l.name === "Instagram")?.href ||
         "https://www.instagram.com/livingluxura",
-    },
-    {
-      name: "LinkedIn",
-      icon: "FaLinkedin",
-      href: "https://www.linkedin.com/company/livingluxura",
-    },
-    {
-      name: "Pinterest",
-      icon: "FaPinterest",
-      href: "https://www.pinterest.com/livingluxura",
     },
     {
       name: "WhatsApp",
@@ -363,23 +360,23 @@ const Footer = () => {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Living Luxura",
-    url: "https://livingluxura.com",
-    address: {
+    "name": "Living Luxura",
+    "url": "https://livingluxura.com",
+    "address": {
       "@type": "PostalAddress",
-      streetAddress: "123 Haven Tower, Thane West",
-      addressLocality: "Thane",
-      addressRegion: "Maharashtra",
-      postalCode: "400601",
-      addressCountry: "India",
+      "streetAddress": "123 Haven Tower, Thane West",
+      "addressLocality": "Thane",
+      "addressRegion": "Maharashtra",
+      "postalCode": "400601",
+      "addressCountry": "India",
     },
-    contactPoint: {
+    "contactPoint": {
       "@type": "ContactPoint",
-      telephone: "+91 921 156 0084",
-      contactType: "Customer Service",
-      email: "connectmarketingbirbal@gmail.com",
+      "telephone": "+91 921 156 0084",
+      "contactType": "Customer Service",
+      "email": "connectmarketingbirbal@gmail.com",
     },
-    sameAs: updatedSocialLinks.map((link) => link.href),
+    "sameAs": updatedSocialLinks.map((link) => link.href),
   };
 
   return (

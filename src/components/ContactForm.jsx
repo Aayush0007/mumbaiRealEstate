@@ -1,12 +1,7 @@
-/* src/components/ContactForm.jsx */
 import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Button from './common/Button';
 import Section from './common/Section';
-
-// Simulated SEO meta tags (typically in index.html head)
-{/* <meta name="description" content="Contact Living Luxura to explore luxury properties in Thane 2025. Schedule a property tour, inquire about exclusive homes, or connect with our real estate experts at livingluxura.com." /> */}
-{/* <meta name="keywords" content="contact luxury real estate Thane 2025, schedule property tour, exclusive homes Thane, Living Luxura, luxury property inquiry, real estate experts Thane, livingluxura.com" /> */}
 
 const FormField = ({ id, label, type = 'text', name, value, onChange, onBlur, error, placeholder, rows, required, icon }) => (
   <div className="relative">
@@ -164,12 +159,12 @@ const ContactForm = () => {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
+      const response = await fetch('/api/macros/s/AKfycbyr133OjKZOsaih_3CQIyWpK_zuP7fFecDvaaSAD6Z1qsNZRFWfAGFrcGvOR1pnsjjxhQ/exec', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, formType: 'contactUs' }),
       });
       const result = await response.json();
       if (result.status === 'success') {
@@ -199,7 +194,6 @@ const ContactForm = () => {
         transition={{ duration: 0.5 }}
         className="container mx-auto px-6 relative z-10"
       >
-
         <motion.h2
           initial={{ opacity: 0, y: -50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -280,7 +274,6 @@ const ContactForm = () => {
               />
             ))}
 
-            {/* You are looking for */}
             <div>
               <label className="block text-dark text-sm font-semibold mb-2 font-sans">
                 You are looking for <span className="text-red-500">*</span>
@@ -321,7 +314,6 @@ const ContactForm = () => {
               )}
             </div>
 
-            {/* When are you planning to buy property */}
             <div>
               <label className="block text-dark text-sm font-semibold mb-2 font-sans">
                 When are you planning to buy property <span className="text-red-500">*</span>
