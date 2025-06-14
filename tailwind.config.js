@@ -9,31 +9,24 @@ export default {
       fontFamily: {
         sans: ['"Poppins"', 'Helvetica', 'Arial', 'sans-serif'],
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
-      },
-      fontWeight: {
-        normal: 400,
-        medium: 500,
-        semibold: 600,
-        bold: 700,
+        cinzel: ['"Cinzel"', 'serif'],
       },
       colors: {
-        primary: '#2B4A8F', // Vibrant Sapphire
-        secondary: '#1A7A78', // Soft Teal
-        accent: '#D4A017', // Desert Gold
-        'accent-light': '#E8B923', // Light Gold
-        dark: '#2D3436', // Slate Charcoal
-        light: '#FFF8E7', // Warm Cream
-        offwhite: '#F5EDE0', // Neutral Beige
-        text: '#2D3436', // Primary Text
+        primary: '#3B82F6', // Blue for buttons
+        secondary: '#1A2C5A', // Dark background
+        accent: '#FFFFFF', // White for text
+        'accent-light': '#E5E7EB', // Light gray for hover effects
+        dark: '#1A2C5A', // Dark background
+        light: '#FFFFFF', // White background for sections
+        offwhite: '#F5F5F5', // Light gray for borders
+        text: '#2D3436', // Dark text for white backgrounds
       },
       backgroundImage: {
-        'gradient-light': 'linear-gradient(to bottom, #FFF8E7, #F5EDE0)', // Warm Cream to Neutral Beige
-        'royal-gradient': 'linear-gradient(to bottom, #2B4A8F, #1A7A78)', // Vibrant Sapphire to Soft Teal
-        'gradient-cute': 'linear-gradient(to right, #D4A017, #E8B923)', // Desert Gold to Light Gold
+        'royal-gradient': 'linear-gradient(to bottom, #1A2C5A, #1A2C5A)', // Simplified gradient
       },
       boxShadow: {
-        'cute': '0 4px 15px rgba(212, 160, 23, 0.3)', // Soft gold glow
-        'cute-hover': '0 6px 20px rgba(232, 185, 35, 0.4)', // Brighter glow on hover
+        'cute': '0 4px 10px rgba(0, 0, 0, 0.1)', // Softer shadow
+        'cute-hover': '0 6px 15px rgba(0, 0, 0, 0.15)', // Hover shadow
       },
     },
   },

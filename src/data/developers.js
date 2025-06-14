@@ -2,7 +2,7 @@ import propertiesDetails from './propertiesDetails';
 
 const developers = [
    {
-    name: 'Lodha',
+    name: 'Lodha Amara',
     properties: [
       {
         id: 1,
@@ -18,8 +18,8 @@ const developers = [
       },
     ],
   },
-  {
-    name: 'Godrej',
+  /*{
+    name: 'Godrej Ascend',
     properties: [
       {
         id: 2,
@@ -34,7 +34,7 @@ const developers = [
         details: propertiesDetails.godrejAscend,
       },
     ],
-  },
+  },*/
 ];
 
 export { developers };

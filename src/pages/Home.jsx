@@ -1,22 +1,23 @@
+/* src/pages/Home.jsx */
 import { Suspense } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import ErrorBoundary from "../components/common/ErrorBoundary";
 import Hero from "../components/Hero";
-import Features from "../components/Features";
+import AboutUs from "../components/AboutUs"; // Import the new component
 import Properties from "../components/Properties";
 import ContactForm from "../components/ContactForm";
 
 const Home = () => {
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-royal-dark text-gray-800">
+      <div className="min-h-screen bg-white text-dark">
         <main>
           <Suspense fallback={<LoadingSpinner />}>
             <Navbar />
             <Hero />
-            <Features />
+            <AboutUs /> {/* Add the About Us section */}
             <Properties />
             <ContactForm />
           </Suspense>

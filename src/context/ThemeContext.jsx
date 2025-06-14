@@ -1,17 +1,18 @@
+/* src/context/ThemeContext.jsx */
 import { createContext, useContext } from 'react';
 
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const theme = {
-    primary: '#2B4A8F', // Vibrant Sapphire
-    secondary: '#1A7A78', // Soft Teal
-    accent: '#D4A017', // Desert Gold
-    accentLight: '#E8B923', // Light Gold
-    dark: '#2D3436', // Slate Charcoal
-    light: '#FFF8E7', // Warm Cream
-    offwhite: '#F5EDE0', // Neutral Beige
-    text: '#2D3436', // Primary Text
+    primary: '#3B82F6', // Blue for buttons
+    secondary: '#1A2C5A', // Dark background
+    accent: '#FFFFFF', // White for text
+    accentLight: '#E5E7EB', // Light gray for hover effects
+    dark: '#1A2C5A', // Dark background
+    light: '#FFFFFF', // White background for sections
+    offwhite: '#F5F5F5', // Light gray for borders
+    text: '#2D3436', // Dark text for white backgrounds
   };
 
   return (

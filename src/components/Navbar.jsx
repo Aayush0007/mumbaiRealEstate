@@ -1,99 +1,176 @@
 /* src/components/Navbar.jsx */
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { navLinks } from "../data/data";
-import Button from "./common/Button";
-import LogoImg from "../assets/Logo.png";
-
 import { FaBars, FaTimes } from "react-icons/fa";
+import Logo from "../assets/Logo.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  // Detect scroll to toggle navbar background
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Animation variants for nav links
+  const linkVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.1, duration: 0.5 },
+    }),
+    hover: {
+      scale: 1.05,
+      color: "#60A5FA",
+      transition: { duration: 0.3 },
+    },
+  };
+
+  // Animation for mobile menu
+  const mobileMenuVariants = {
+    hidden: { x: "100%", opacity: 0 },
+    visible: { x: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } },
+    exit: { x: "100%", opacity: 0, transition: { duration: 0.3, ease: "easeIn" } },
+  };
 
   return (
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 120 }}
-      className="fixed w-full bg-white bg-opacity-95 shadow-lg z-50 py-4 px-6 md:px-12"
+      className={`fixed w-full text-white z-50 py-4 px-4 sm:px-6 md:px-12 transition-all duration-500 ${
+        isScrolled ? "bg-dark/70 backdrop-blur-lg shadow-lg" : "bg-transparent backdrop-blur-sm"
+      }`}
     >
       <div className="container mx-auto flex justify-between items-center">
-        {/* <a
-          href="#home"
-          className="text-2xl font-bold font-serif text-dark hover:text-primary transition-colors duration-300"
-          aria-label="Dream Estates Home"
-        >
-          Dream Estates
-        </a> */}
-        <a
-          href="#home"
-          className="flex items-center space-x-2"
-          aria-label="Dream Estates Home"
-        >
-          <img
-            src={LogoImg} // Replace with actual logo path
-            alt="Logo"
-            className="h-10 w-auto object-contain"
-          />
-          <span className="text-2xl font-bold font-serif text-dark hover:text-primary transition-colors duration-300">
-            Dream Estates
-          </span>
-        </a>
-        <ul className="hidden md:flex space-x-8">
-          {navLinks.map((link) => (
-            <li key={link.name}>
-              <a
-                href={link.href}
-                className="text-dark hover:text-primary transition-colors duration-300 font-medium"
+        <div className="flex items-center space-x-3">
+          <motion.a
+            href="#home"
+            aria-label="Haven Global Living Home"
+            whileHover={{ rotate: 10, scale: 1.1 }}
+            transition={{ type: "spring", stiffness: 200 }}
+          >
+            <img
+              src={Logo}
+              alt="Haven Global Living Logo"
+              className="h-8 sm:h-10 md:h-12 object-contain"
+            />
+          </motion.a>
+          <a
+            href="#home"
+            className="text-lg sm:text-xl md:text-2xl font-cinzel font-bold text-white hover:text-blue-400 transition-colors duration-300"
+          >
+            Haven Global Living
+          </a>
+        </div>
+        <div className="flex items-center space-x-4 sm:space-x-6">
+          <ul className="hidden md:flex space-x-8 lg:space-x-10">
+            {navLinks.map((link, index) => (
+              <motion.li
+                key={link.name}
+                custom={index}
+                initial="hidden"
+                animate="visible"
+                variants={linkVariants}
+                whileHover="hover"
+                className="relative"
               >
-                {link.name}
-              </a>
-            </li>
-          ))}
-        </ul>
-        <Button href="#contact" className="hidden md:block">
-          Get Started
-        </Button>
-        <button
-          onClick={toggleMenu}
-          className="md:hidden text-dark focus:outline-none"
-          aria-label={isOpen ? "Close menu" : "Open menu"}
-        >
-          {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-        </button>
-      </div>
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.3 }}
-          className="md:hidden bg-white py-4 mt-2 border-t border-gray-200"
-        >
-          <ul className="flex flex-col items-center space-y-4">
-            {navLinks.map((link) => (
-              <li key={link.name}>
                 <a
                   href={link.href}
-                  onClick={toggleMenu}
-                  className="text-dark hover:text-primary transition-colors duration-300 font-medium text-lg"
+                  className="text-white font-cinzel font-medium text-lg tracking-wider"
                 >
                   {link.name}
+                  <motion.span
+                    className="absolute left-0 bottom-0 w-full h-0.5 bg-blue-400"
+                    initial={{ scaleX: 0 }}
+                    whileHover={{ scaleX: 1 }}
+                    transition={{ duration: 0.3 }}
+                  />
                 </a>
-              </li>
+              </motion.li>
             ))}
-            <Button
-              href="#contact"
-              onClick={toggleMenu}
-              className="border-2 border-[${theme.accent}] hover:border-[${theme.dark}] text-[${theme.dark}] font-bold py-2 px-6 animate-pulse-button"
-            >
-              Get Started
-            </Button>
           </ul>
-        </motion.div>
-      )}
+          <motion.a
+            href="https://wa.me/9211560084?text=Hello,%20I'm%20interested%20in%20exploring%20properties%20with%20Haven%20Global%20Living.%20Can%20you%20help%20me?"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:block bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-cinzel font-medium text-base px-6 py-2 rounded-md transition-all duration-300 shadow-md hover:shadow-lg"
+            whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(59, 130, 246, 0.5)" }}
+          >
+            Get Started
+          </motion.a>
+          <button
+            onClick={toggleMenu}
+            className="md:hidden text-white focus:outline-none focus:ring-2 focus:ring-blue-400 rounded"
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+          >
+            {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+          </button>
+        </div>
+      </div>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            variants={mobileMenuVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="md:hidden fixed inset-0 bg-dark/95 backdrop-blur-md py-6 px-6 min-h-screen"
+          >
+            <div className="flex justify-end mb-4">
+              <button
+                onClick={toggleMenu}
+                className="text-white focus:outline-none focus:ring-2 focus:ring-blue-400 rounded"
+                aria-label="Close menu"
+              >
+                <FaTimes size={32} />
+              </button>
+            </div>
+            <ul className="flex flex-col items-center justify-center h-full space-y-6">
+              {navLinks.map((link, index) => (
+                <motion.li
+                  key={link.name}
+                  custom={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                >
+                  <a
+                    href={link.href}
+                    onClick={toggleMenu}
+                    className="text-white hover:text-blue-400 transition-colors duration-300 font-cinzel font-medium text-xl tracking-wider drop-shadow-md"
+                  >
+                    {link.name}
+                  </a>
+                </motion.li>
+              ))}
+              <motion.li
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: navLinks.length * 0.1, duration: 0.5 }}
+              >
+                <a
+                  href="https://wa.me/9211560084?text=Hello,%20I'm%20interested%20in%20exploring%20properties%20with%20Haven%20Global%20Living.%20Can%20you%20help%20me?"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-cinzel font-medium text-lg px-6 py-2 rounded-md transition-all duration-300 shadow-md hover:shadow-lg"
+                >
+                  Get Started
+                </a>
+              </motion.li>
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 };

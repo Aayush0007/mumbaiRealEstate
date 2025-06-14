@@ -1,7 +1,9 @@
+/* src/components/Footer.jsx */
 import { motion } from 'framer-motion';
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaPinterest } from 'react-icons/fa';
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaPinterest, FaWhatsapp, FaArrowUp } from 'react-icons/fa';
 import { footerContent, navLinks } from '../data/data';
 import { useTheme } from '../context/ThemeContext';
+import { useState } from 'react';
 
 const iconMap = {
   FaFacebook,
@@ -9,9 +11,10 @@ const iconMap = {
   FaInstagram,
   FaLinkedin,
   FaPinterest,
+  FaWhatsapp,
 };
 
-const CompanyInfo = ({ companyName, address, phone, email }) => {
+const CompanyInfo = ({ companyName, address, phone, email, tagline }) => {
   const { theme } = useTheme();
   return (
     <section aria-label="Company Information">
@@ -20,7 +23,7 @@ const CompanyInfo = ({ companyName, address, phone, email }) => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
-        className="text-2xl font-bold font-serif text-primary mb-4"
+        className="text-2xl font-cinzel font-bold text-blue-600 mb-4"
       >
         {companyName}
       </motion.h3>
@@ -29,34 +32,61 @@ const CompanyInfo = ({ companyName, address, phone, email }) => {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="text-sm text-offwhite mb-2"
+        className="text-sm text-gray-300 mb-3 font-sans"
       >
-        {address}
+        {tagline}
       </motion.p>
       <motion.p
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="text-sm text-offwhite mb-2"
+        className="text-sm text-gray-300 mb-2 font-sans"
       >
-        Phone: <a href={`tel:${phone}`} className="hover:text-accent transition-colors">{phone}</a>
+        📍 {address}
       </motion.p>
       <motion.p
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="text-sm text-offwhite"
+        className="text-sm text-gray-300 mb-2 font-sans"
       >
-        Email: <a href={`mailto:${email}`} className="hover:text-accent transition-colors">{email}</a>
+        📞 <a href={`tel:${phone}`} className="hover:text-blue-400 transition-colors">{phone}</a>
       </motion.p>
+      <motion.p
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+        className="text-sm text-gray-300 mb-2 font-sans"
+      >
+        📧 <a href={`mailto:${email}`} className="hover:text-blue-400 transition-colors">{email}</a>
+      </motion.p>
+      <motion.a
+        href="https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20inquire%20about%20luxury%20properties%20in%20Thane."
+        target="_blank"
+        rel="noopener noreferrer"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.6 }}
+        className="flex items-center text-sm text-gray-300 hover:text-blue-400 transition-colors font-sans"
+      >
+        <FaWhatsapp className="mr-2" /> Chat on WhatsApp
+      </motion.a>
     </section>
   );
 };
 
 const QuickLinks = ({ links }) => {
   const { theme } = useTheme();
+  const additionalLinks = [
+    { name: 'Privacy Policy', href: '/privacy-policy' },
+    { name: 'Terms of Service', href: '/terms-of-service' },
+  ];
+  const allLinks = [...links, ...additionalLinks];
+
   return (
     <section aria-label="Quick Links">
       <motion.h4
@@ -64,13 +94,13 @@ const QuickLinks = ({ links }) => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
-        className="text-xl font-semibold text-primary mb-4"
+        className="text-xl font-cinzel font-semibold text-blue-600 mb-4"
       >
         Quick Links
       </motion.h4>
       <nav>
         <ul className="space-y-2">
-          {links.map((link, index) => (
+          {allLinks.map((link, index) => (
             <motion.li
               key={link.name}
               initial={{ opacity: 0, x: -20 }}
@@ -80,7 +110,7 @@ const QuickLinks = ({ links }) => {
             >
               <a
                 href={link.href}
-                className="text-offwhite hover:text-accent transition-colors duration-200 text-sm"
+                className="text-gray-300 hover:text-blue-400 transition-colors duration-200 text-sm font-sans"
                 aria-current={window.location.pathname === link.href ? 'page' : undefined}
               >
                 {link.name}
@@ -89,6 +119,86 @@ const QuickLinks = ({ links }) => {
           ))}
         </ul>
       </nav>
+    </section>
+  );
+};
+
+const Newsletter = () => {
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setMessage('Please enter a valid email address.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    // Simulate API call for newsletter subscription
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setEmail('');
+    setMessage('Subscribed successfully! Stay tuned for updates.');
+    setIsSubmitting(false);
+    setTimeout(() => setMessage(''), 3000);
+  };
+
+  return (
+    <section aria-label="Newsletter Subscription">
+      <motion.h4
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="text-xl font-cinzel font-semibold text-blue-600 mb-4"
+      >
+        Stay Updated
+      </motion.h4>
+      <motion.p
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="text-sm text-gray-300 mb-4 font-sans"
+      >
+        Subscribe to our newsletter for the latest luxury property updates in Thane 2025.
+      </motion.p>
+      {message && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className={`text-sm mb-2 font-sans ${message.includes('success') ? 'text-green-400' : 'text-red-400'}`}
+        >
+          {message}
+        </motion.p>
+      )}
+      <form onSubmit={handleSubmit} className="flex space-x-2">
+        <motion.input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
+          className="w-full py-2 px-4 rounded-md bg-gray-700 text-gray-300 text-sm font-sans focus:outline-none focus:ring-2 focus:ring-blue-600"
+          aria-label="Email for newsletter subscription"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        />
+        <motion.button
+          type="submit"
+          disabled={isSubmitting}
+          className={`py-2 px-4 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-md font-sans text-sm ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          whileHover={{ scale: 1.05 }}
+        >
+          {isSubmitting ? 'Subscribing...' : 'Subscribe'}
+        </motion.button>
+      </form>
     </section>
   );
 };
@@ -102,7 +212,7 @@ const SocialMedia = ({ socialLinks }) => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
-        className="text-xl font-semibold text-primary mb-4"
+        className="text-xl font-cinzel font-semibold text-blue-600 mb-4"
       >
         Follow Us
       </motion.h4>
@@ -118,9 +228,9 @@ const SocialMedia = ({ socialLinks }) => {
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              whileHover={{ scale: 1.2, rotate: 5 }}
+              whileHover={{ scale: 1.2, rotate: 5, background: 'linear-gradient(to right, #2563eb, #1e40af)' }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="text-offwhite hover:text-accent bg-light/10 p-2 rounded-full shadow-cute transition-colors"
+              className="text-gray-300 bg-gray-700 p-2 rounded-full shadow-md transition-colors"
               aria-label={`Follow us on ${link.name}`}
             >
               <IconComponent size={24} />
@@ -132,6 +242,27 @@ const SocialMedia = ({ socialLinks }) => {
   );
 };
 
+const ScrollToTop = () => {
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <motion.button
+      onClick={handleScrollToTop}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      whileHover={{ scale: 1.1 }}
+      className="fixed bottom-8 right-8 bg-gradient-to-r from-blue-600 to-blue-800 text-white p-3 rounded-full shadow-lg"
+      aria-label="Scroll to top"
+    >
+      <FaArrowUp size={20} />
+    </motion.button>
+  );
+};
+
 const Footer = () => {
   const { theme } = useTheme();
 
@@ -139,25 +270,56 @@ const Footer = () => {
     { name: 'Facebook', icon: 'FaFacebook', href: footerContent.socialLinks.find(l => l.name === 'Facebook')?.href || '#' },
     { name: 'Twitter', icon: 'FaTwitter', href: footerContent.socialLinks.find(l => l.name === 'Twitter')?.href || '#' },
     { name: 'Instagram', icon: 'FaInstagram', href: footerContent.socialLinks.find(l => l.name === 'Instagram')?.href || '#' },
-    { name: 'LinkedIn', icon: 'FaLinkedin', href: 'https://www.linkedin.com/company/yourcompany' },
-    { name: 'Pinterest', icon: 'FaPinterest', href: 'https://www.pinterest.com/yourcompany' },
+    { name: 'LinkedIn', icon: 'FaLinkedin', href: 'https://www.linkedin.com/company/havenglobal' },
+    { name: 'Pinterest', icon: 'FaPinterest', href: 'https://www.pinterest.com/havenglobal' },
+    { name: 'WhatsApp', icon: 'FaWhatsapp', href: 'https://wa.me/9211560084?text=Hello,%20I\'d%20like%20to%20inquire%20about%20luxury%20properties%20in%20Thane.' },
   ];
+
+  // Structured Data for SEO
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Haven Global Living",
+    "url": "https://www.havenglobal.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "123 Haven Tower, Thane West",
+      "addressLocality": "Thane",
+      "addressRegion": "Maharashtra",
+      "postalCode": "400601",
+      "addressCountry": "India"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+91 921 156 0084",
+      "contactType": "Customer Service",
+      "email": "info@havenglobal.com"
+    },
+    "sameAs": updatedSocialLinks.map(link => link.href)
+  };
 
   return (
     <footer
-      className="bg-dark text-offwhite py-12 md:py-16 relative overflow-hidden"
+      className="bg-gray-900 text-gray-300 py-12 md:py-16 relative overflow-hidden"
       aria-label="Website Footer"
     >
-      <div className="absolute inset-0 bg-gradient-to-t from-dark/80 to-transparent" />
+      {/* Structured Data for SEO */}
+      <script type="application/ld+json">
+        {JSON.stringify(structuredData)}
+      </script>
+
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.1)_0%,transparent_70%)] opacity-50" />
       <div className="container mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           <CompanyInfo
-            companyName={footerContent.companyName || 'Mumbai Real Estate'}
-            address={footerContent.address || '123 Thane Road, Mumbai, India'}
-            phone={footerContent.phone || '+91 123 456 7890'}
-            email={footerContent.email || 'info@mumbairealestate.com'}
+            companyName="Haven Global Living"
+            tagline="Your Gateway to Luxury Real Estate in Thane 2025"
+            address="123 Haven Tower, Thane West, Maharashtra 400601"
+            phone="+91 921 156 0084"
+            email="info@havenglobal.com"
           />
           <QuickLinks links={navLinks || []} />
+          <Newsletter />
           <SocialMedia socialLinks={updatedSocialLinks} />
         </div>
         <motion.div
@@ -165,11 +327,12 @@ const Footer = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.5 }}
-          className="border-t border-offwhite/20 mt-10 pt-6 text-center text-sm text-offwhite/70"
+          className="border-t border-gray-700 mt-10 pt-6 text-center text-sm text-gray-400 font-sans"
         >
-          {footerContent.copyright || `© ${new Date().getFullYear()} Mumbai Real Estate. All rights reserved.`}
+          © 2025 Haven Global Living. All rights reserved.
         </motion.div>
       </div>
+      <ScrollToTop />
     </footer>
   );
 };
