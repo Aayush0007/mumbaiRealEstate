@@ -1,0 +1,21 @@
+{
+  "name": "Living Luxura",
+  "short_name": "LivingLuxura",
+  "description": "Discover luxury properties in Thane 2025 with Living Luxura. Explore premium homes, exclusive apartments, and high-end real estate.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e3a8a",
+  "icons": [
+    {
+      "src": "src/assets/Logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

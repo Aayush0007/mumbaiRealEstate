@@ -3,10 +3,11 @@ import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Button from './common/Button';
 import Section from './common/Section';
+import PropertyLocation from './PropertyLocation';
 
 // Simulated SEO meta tags (typically in index.html head)
-{/* <meta name="description" content="Contact Haven Global Living to explore luxury properties in Thane 2025. Schedule a property tour, inquire about exclusive homes, or connect with our real estate experts." /> */}
-{/* <meta name="keywords" content="contact luxury real estate Thane 2025, schedule property tour, exclusive homes Thane, Haven Global Living, luxury property inquiry, real estate experts Thane" /> */}
+{/* <meta name="description" content="Contact Living Luxura to explore luxury properties in Thane 2025. Schedule a property tour, inquire about exclusive homes, or connect with our real estate experts at livingluxura.com." /> */}
+{/* <meta name="keywords" content="contact luxury real estate Thane 2025, schedule property tour, exclusive homes Thane, Living Luxura, luxury property inquiry, real estate experts Thane, livingluxura.com" /> */}
 
 const FormField = ({ id, label, type = 'text', name, value, onChange, onBlur, error, placeholder, rows, required, icon }) => (
   <div className="relative">
@@ -65,8 +66,10 @@ const FormField = ({ id, label, type = 'text', name, value, onChange, onBlur, er
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: '',
+    mobile: '',
     email: '',
-    phone: '',
+    lookingFor: '',
+    planningToBuy: '',
     message: '',
   });
   const [errors, setErrors] = useState({});
@@ -84,22 +87,22 @@ const ContactForm = () => {
       icon: '👤',
     },
     {
+      id: 'mobile',
+      label: 'Mobile No.',
+      name: 'mobile',
+      type: 'tel',
+      placeholder: '+91 921 156 0084',
+      required: true,
+      icon: '📞',
+    },
+    {
       id: 'email',
-      label: 'Email',
+      label: 'Email (Optional)',
       name: 'email',
       type: 'email',
       placeholder: 'your.email@example.com',
-      required: true,
+      required: false,
       icon: '📧',
-    },
-    {
-      id: 'phone',
-      label: 'Phone',
-      name: 'phone',
-      type: 'tel',
-      placeholder: '+91 123-456-7890',
-      required: true,
-      icon: '📞',
     },
     {
       id: 'message',
@@ -113,16 +116,26 @@ const ContactForm = () => {
     },
   ];
 
+  const lookingForOptions = [
+    { value: 'Property to Buy', label: 'Property to Buy' },
+    { value: 'Property for Investment', label: 'Property for Investment' },
+  ];
+
+  const planningToBuyOptions = [
+    { value: 'Soon', label: 'Soon' },
+    { value: 'Within 4-6 Months', label: 'Within 4-6 Months' },
+    { value: 'Just Looking', label: 'Just Looking' },
+  ];
+
   const validateField = (name, value) => {
     if (name === 'name' && !value.trim()) return 'Name is required';
-    if (name === 'email') {
-      if (!value.trim()) return 'Email is required';
-      if (!/\S+@\S+\.\S+/.test(value)) return 'Invalid email format';
+    if (name === 'mobile') {
+      if (!value.trim()) return 'Mobile number is required';
+      if (!/^\+?[1-9]\d{1,14}$/.test(value.replace(/\D/g, ''))) return 'Invalid mobile number format';
     }
-    if (name === 'phone') {
-      if (!value.trim()) return 'Phone number is required';
-      if (!/^\+?[1-9]\d{1,14}$/.test(value.replace(/\D/g, ''))) return 'Invalid phone number format';
-    }
+    if (name === 'email' && value.trim() && !/\S+@\S+\.\S+/.test(value)) return 'Invalid email format';
+    if (name === 'lookingFor' && !value) return 'Please select an option';
+    if (name === 'planningToBuy' && !value) return 'Please select an option';
     if (name === 'message' && !value.trim()) return 'Message is required';
     return '';
   };
@@ -141,8 +154,8 @@ const ContactForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
-    fields.forEach((field) => {
-      newErrors[field.name] = validateField(field.name, formData[field.name]);
+    ['name', 'mobile', 'email', 'lookingFor', 'planningToBuy', 'message'].forEach((field) => {
+      newErrors[field] = validateField(field, formData[field]);
     });
 
     if (Object.values(newErrors).some((error) => error)) {
@@ -161,7 +174,7 @@ const ContactForm = () => {
       });
       const result = await response.json();
       if (result.status === 'success') {
-        setFormData({ name: '', email: '', phone: '', message: '' });
+        setFormData({ name: '', mobile: '', email: '', lookingFor: '', planningToBuy: '', message: '' });
         setErrors({});
         setSuccess(true);
         setTimeout(() => setSuccess(false), 3000);
@@ -187,6 +200,8 @@ const ContactForm = () => {
         transition={{ duration: 0.5 }}
         className="container mx-auto px-6 relative z-10"
       >
+        <PropertyLocation />
+
         <motion.h2
           initial={{ opacity: 0, y: -50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -203,7 +218,7 @@ const ContactForm = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-center text-lg md:text-xl font-sans text-dark/80 max-w-3xl mx-auto mb-8"
         >
-          Let’s find your dream home! Schedule a property tour or inquire about exclusive homes with Haven Global Living.
+          Let’s find your dream home! Schedule a property tour or inquire about exclusive homes with Living Luxura.
         </motion.p>
         <motion.div
           initial={{ width: 0 }}
@@ -266,6 +281,89 @@ const ContactForm = () => {
                 error={errors[field.name]}
               />
             ))}
+
+            {/* You are looking for */}
+            <div>
+              <label className="block text-dark text-sm font-semibold mb-2 font-sans">
+                You are looking for <span className="text-red-500">*</span>
+              </label>
+              <div className="flex flex-wrap gap-4">
+                {lookingForOptions.map((option) => (
+                  <label key={option.value} className="flex items-center">
+                    <input
+                      type="radio"
+                      name="lookingFor"
+                      value={option.value}
+                      checked={formData.lookingFor === option.value}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className="hidden"
+                      required
+                    />
+                    <span
+                      className={`flex items-center px-4 py-2 rounded-md border cursor-pointer transition-all ${
+                        formData.lookingFor === option.value
+                          ? 'bg-blue-600 text-white border-blue-600'
+                          : 'bg-white/80 border-gray-200 hover:border-blue-600'
+                      }`}
+                    >
+                      {option.label}
+                    </span>
+                  </label>
+                ))}
+              </div>
+              {errors.lookingFor && (
+                <motion.p
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="text-red-500 text-sm mt-1"
+                >
+                  {errors.lookingFor}
+                </motion.p>
+              )}
+            </div>
+
+            {/* When are you planning to buy property */}
+            <div>
+              <label className="block text-dark text-sm font-semibold mb-2 font-sans">
+                When are you planning to buy property <span className="text-red-500">*</span>
+              </label>
+              <div className="flex flex-wrap gap-4">
+                {planningToBuyOptions.map((option) => (
+                  <label key={option.value} className="flex items-center">
+                    <input
+                      type="radio"
+                      name="planningToBuy"
+                      value={option.value}
+                      checked={formData.planningToBuy === option.value}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className="hidden"
+                      required
+                    />
+                    <span
+                      className={`flex items-center px-4 py-2 rounded-md border cursor-pointer transition-all ${
+                        formData.planningToBuy === option.value
+                          ? 'bg-blue-600 text-white border-blue-600'
+                          : 'bg-white/80 border-gray-200 hover:border-blue-600'
+                      }`}
+                    >
+                      {option.label}
+                    </span>
+                  </label>
+                ))}
+              </div>
+              {errors.planningToBuy && (
+                <motion.p
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="text-red-500 text-sm mt-1"
+                >
+                  {errors.planningToBuy}
+                </motion.p>
+              )}
+            </div>
+
             <div className="flex items-center justify-center">
               <Button
                 type="submit"
@@ -319,12 +417,12 @@ const ContactForm = () => {
               📍 123 Haven Tower, Thane West, Maharashtra 400601
             </p>
             <p className="text-dark/80 font-sans">
-              📧 <a href="mailto:info@havenglobal.com" className="hover:text-blue-600">info@havenglobal.com</a>
+              📧 <a href="mailto:connectmarketingbirbal@gmail.com" className="hover:text-blue-600">connectmarketingbirbal@gmail.com</a>
             </p>
             <motion.a
-              href="https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20inquire%20about%20luxury%20properties%20in%20Thane."
+              href="https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20inquire%20about%20luxury%20properties%20in%20Thane%20-%20livingluxura.com"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer nofollow"
               whileHover={{ scale: 1.05 }}
               className="text-dark/80 font-sans hover:text-blue-600"
             >

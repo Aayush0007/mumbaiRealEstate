@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { navLinks } from "../data/data";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes, FaWhatsapp } from "react-icons/fa";
 import Logo from "../assets/Logo.png";
 
 const Navbar = () => {
@@ -38,8 +38,16 @@ const Navbar = () => {
   // Animation for mobile menu
   const mobileMenuVariants = {
     hidden: { x: "100%", opacity: 0 },
-    visible: { x: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } },
-    exit: { x: "100%", opacity: 0, transition: { duration: 0.3, ease: "easeIn" } },
+    visible: {
+      x: 0,
+      opacity: 1,
+      transition: { duration: 0.5, ease: "easeOut" },
+    },
+    exit: {
+      x: "100%",
+      opacity: 0,
+      transition: { duration: 0.3, ease: "easeIn" },
+    },
   };
 
   return (
@@ -48,20 +56,22 @@ const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 120 }}
       className={`fixed w-full text-white z-50 py-4 px-4 sm:px-6 md:px-12 transition-all duration-500 ${
-        isScrolled ? "bg-dark/70 backdrop-blur-lg shadow-lg" : "bg-transparent backdrop-blur-sm"
+        isScrolled
+          ? "bg-dark/70 backdrop-blur-lg shadow-lg"
+          : "bg-transparent backdrop-blur-sm"
       }`}
     >
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center space-x-3">
           <motion.a
             href="#home"
-            aria-label="Haven Global Living Home"
+            aria-label="Living Luxura Home"
             whileHover={{ rotate: 10, scale: 1.1 }}
             transition={{ type: "spring", stiffness: 200 }}
           >
             <img
               src={Logo}
-              alt="Haven Global Living Logo"
+              alt="Living Luxura Logo"
               className="h-8 sm:h-10 md:h-12 object-contain"
             />
           </motion.a>
@@ -69,7 +79,7 @@ const Navbar = () => {
             href="#home"
             className="text-lg sm:text-xl md:text-2xl font-cinzel font-bold text-white hover:text-blue-400 transition-colors duration-300"
           >
-            Haven Global Living
+            Living Luxura
           </a>
         </div>
         <div className="flex items-center space-x-4 sm:space-x-6">
@@ -100,12 +110,16 @@ const Navbar = () => {
             ))}
           </ul>
           <motion.a
-            href="https://wa.me/9211560084?text=Hello,%20I'm%20interested%20in%20exploring%20properties%20with%20Haven%20Global%20Living.%20Can%20you%20help%20me?"
+            href="https://wa.me/9211560084?text=Hello,%20I'm%20interested%20in%20exploring%20properties%20with%20Living%20Luxura.%20Can%20you%20help%20me?"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden md:block bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-cinzel font-medium text-base px-6 py-2 rounded-md transition-all duration-300 shadow-md hover:shadow-lg"
-            whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(59, 130, 246, 0.5)" }}
+            className="hidden md:flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-cinzel font-medium text-base px-6 py-2 rounded-md transition-all duration-300 shadow-md hover:shadow-lg"
+            whileHover={{
+              scale: 1.05,
+              boxShadow: "0 0 15px rgba(59, 130, 246, 0.5)",
+            }}
           >
+            <FaWhatsapp className="text-lg" /> {/* WhatsApp Icon */}
             Get Started
           </motion.a>
           <button
@@ -158,14 +172,19 @@ const Navbar = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: navLinks.length * 0.1, duration: 0.5 }}
               >
-                <a
-                  href="https://wa.me/9211560084?text=Hello,%20I'm%20interested%20in%20exploring%20properties%20with%20Haven%20Global%20Living.%20Can%20you%20help%20me?"
+                <motion.a
+                  href="https://wa.me/9211560084?text=Hello,%20I'm%20interested%20in%20exploring%20properties%20with%20Living%20Luxura.%20Can%20you%20help%20me?"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-cinzel font-medium text-lg px-6 py-2 rounded-md transition-all duration-300 shadow-md hover:shadow-lg"
+                  className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-cinzel font-medium text-base px-6 py-2 rounded-md transition-all duration-300 shadow-md hover:shadow-lg"
+                  whileHover={{
+                    scale: 1.05,
+                    boxShadow: "0 0 15px rgba(59, 130, 246, 0.5)",
+                  }}
                 >
+                  <FaWhatsapp className="text-lg" /> {/* WhatsApp Icon */}
                   Get Started
-                </a>
+                </motion.a>
               </motion.li>
             </ul>
           </motion.div>

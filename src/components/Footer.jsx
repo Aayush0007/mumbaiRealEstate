@@ -1,9 +1,17 @@
 /* src/components/Footer.jsx */
-import { motion } from 'framer-motion';
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaPinterest, FaWhatsapp, FaArrowUp } from 'react-icons/fa';
-import { footerContent, navLinks } from '../data/data';
-import { useTheme } from '../context/ThemeContext';
-import { useState } from 'react';
+import { motion } from "framer-motion";
+import {
+  FaFacebook,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedin,
+  FaPinterest,
+  FaWhatsapp,
+  FaArrowUp,
+} from "react-icons/fa";
+import { footerContent, navLinks } from "../data/data";
+import { useTheme } from "../context/ThemeContext";
+import { useState } from "react";
 
 const iconMap = {
   FaFacebook,
@@ -52,7 +60,13 @@ const CompanyInfo = ({ companyName, address, phone, email, tagline }) => {
         transition={{ duration: 0.5, delay: 0.4 }}
         className="text-sm text-gray-300 mb-2 font-sans"
       >
-        📞 <a href={`tel:${phone}`} className="hover:text-blue-400 transition-colors">{phone}</a>
+        📞{" "}
+        <a
+          href={`tel:${phone}`}
+          className="hover:text-blue-400 transition-colors"
+        >
+          {phone}
+        </a>
       </motion.p>
       <motion.p
         initial={{ opacity: 0 }}
@@ -61,12 +75,18 @@ const CompanyInfo = ({ companyName, address, phone, email, tagline }) => {
         transition={{ duration: 0.5, delay: 0.5 }}
         className="text-sm text-gray-300 mb-2 font-sans"
       >
-        📧 <a href={`mailto:${email}`} className="hover:text-blue-400 transition-colors">{email}</a>
+        📧{" "}
+        <a
+          href={`mailto:${email}`}
+          className="hover:text-blue-400 transition-colors"
+        >
+          {email}
+        </a>
       </motion.p>
       <motion.a
-        href="https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20inquire%20about%20luxury%20properties%20in%20Thane."
+        href="https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20inquire%20about%20luxury%20properties%20in%20Thane%20-%20livingluxura.com"
         target="_blank"
-        rel="noopener noreferrer"
+        rel="noopener noreferrer nofollow"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
@@ -82,8 +102,8 @@ const CompanyInfo = ({ companyName, address, phone, email, tagline }) => {
 const QuickLinks = ({ links }) => {
   const { theme } = useTheme();
   const additionalLinks = [
-    { name: 'Privacy Policy', href: '/privacy-policy' },
-    { name: 'Terms of Service', href: '/terms-of-service' },
+    { name: "Privacy Policy", href: "/privacy-policy" },
+    { name: "Terms of Service", href: "/terms-of-service" },
   ];
   const allLinks = [...links, ...additionalLinks];
 
@@ -111,7 +131,9 @@ const QuickLinks = ({ links }) => {
               <a
                 href={link.href}
                 className="text-gray-300 hover:text-blue-400 transition-colors duration-200 text-sm font-sans"
-                aria-current={window.location.pathname === link.href ? 'page' : undefined}
+                aria-current={
+                  window.location.pathname === link.href ? "page" : undefined
+                }
               >
                 {link.name}
               </a>
@@ -124,24 +146,24 @@ const QuickLinks = ({ links }) => {
 };
 
 const Newsletter = () => {
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!/\S+@\S+\.\S+/.test(email)) {
-      setMessage('Please enter a valid email address.');
+      setMessage("Please enter a valid email address.");
       return;
     }
 
     setIsSubmitting(true);
     // Simulate API call for newsletter subscription
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    setEmail('');
-    setMessage('Subscribed successfully! Stay tuned for updates.');
+    setEmail("");
+    setMessage("Subscribed successfully! Stay tuned for updates.");
     setIsSubmitting(false);
-    setTimeout(() => setMessage(''), 3000);
+    setTimeout(() => setMessage(""), 3000);
   };
 
   return (
@@ -162,13 +184,16 @@ const Newsletter = () => {
         transition={{ duration: 0.5, delay: 0.2 }}
         className="text-sm text-gray-300 mb-4 font-sans"
       >
-        Subscribe to our newsletter for the latest luxury property updates in Thane 2025.
+        Subscribe to our newsletter for the latest luxury property updates in
+        Thane 2025.
       </motion.p>
       {message && (
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className={`text-sm mb-2 font-sans ${message.includes('success') ? 'text-green-400' : 'text-red-400'}`}
+          className={`text-sm mb-2 font-sans ${
+            message.includes("success") ? "text-green-400" : "text-red-400"
+          }`}
         >
           {message}
         </motion.p>
@@ -189,14 +214,16 @@ const Newsletter = () => {
         <motion.button
           type="submit"
           disabled={isSubmitting}
-          className={`py-2 px-4 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-md font-sans text-sm ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`py-2 px-4 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-md font-sans text-sm ${
+            isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+          }`}
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.4 }}
           whileHover={{ scale: 1.05 }}
         >
-          {isSubmitting ? 'Subscribing...' : 'Subscribe'}
+          {isSubmitting ? "Subscribing..." : "Subscribe"}
         </motion.button>
       </form>
     </section>
@@ -224,11 +251,15 @@ const SocialMedia = ({ socialLinks }) => {
               key={link.name}
               href={link.href}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer nofollow"
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              whileHover={{ scale: 1.2, rotate: 5, background: 'linear-gradient(to right, #2563eb, #1e40af)' }}
+              whileHover={{
+                scale: 1.2,
+                rotate: 5,
+                background: "linear-gradient(to right, #2563eb, #1e40af)",
+              }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
               className="text-gray-300 bg-gray-700 p-2 rounded-full shadow-md transition-colors"
               aria-label={`Follow us on ${link.name}`}
@@ -244,7 +275,7 @@ const SocialMedia = ({ socialLinks }) => {
 
 const ScrollToTop = () => {
   const handleScrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -267,35 +298,65 @@ const Footer = () => {
   const { theme } = useTheme();
 
   const updatedSocialLinks = [
-    { name: 'Facebook', icon: 'FaFacebook', href: footerContent.socialLinks.find(l => l.name === 'Facebook')?.href || '#' },
-    { name: 'Twitter', icon: 'FaTwitter', href: footerContent.socialLinks.find(l => l.name === 'Twitter')?.href || '#' },
-    { name: 'Instagram', icon: 'FaInstagram', href: footerContent.socialLinks.find(l => l.name === 'Instagram')?.href || '#' },
-    { name: 'LinkedIn', icon: 'FaLinkedin', href: 'https://www.linkedin.com/company/havenglobal' },
-    { name: 'Pinterest', icon: 'FaPinterest', href: 'https://www.pinterest.com/havenglobal' },
-    { name: 'WhatsApp', icon: 'FaWhatsapp', href: 'https://wa.me/9211560084?text=Hello,%20I\'d%20like%20to%20inquire%20about%20luxury%20properties%20in%20Thane.' },
+    {
+      name: "Facebook",
+      icon: "FaFacebook",
+      href:
+        footerContent.socialLinks.find((l) => l.name === "Facebook")?.href ||
+        "https://www.facebook.com/livingluxura",
+    },
+    {
+      name: "Twitter",
+      icon: "FaTwitter",
+      href:
+        footerContent.socialLinks.find((l) => l.name === "Twitter")?.href ||
+        "https://www.twitter.com/LivingLuxura",
+    },
+    {
+      name: "Instagram",
+      icon: "FaInstagram",
+      href:
+        footerContent.socialLinks.find((l) => l.name === "Instagram")?.href ||
+        "https://www.instagram.com/livingluxura",
+    },
+    {
+      name: "LinkedIn",
+      icon: "FaLinkedin",
+      href: "https://www.linkedin.com/company/livingluxura",
+    },
+    {
+      name: "Pinterest",
+      icon: "FaPinterest",
+      href: "https://www.pinterest.com/livingluxura",
+    },
+    {
+      name: "WhatsApp",
+      icon: "FaWhatsapp",
+      href: "https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20inquire%20about%20luxury%20properties%20in%20Thane%20-%20livingluxura.com",
+    },
   ];
 
   // Structured Data for SEO
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Haven Global Living",
-    "url": "https://www.havenglobal.com",
-    "address": {
+    name: "Living Luxura",
+    url: "https://livingluxura.com",
+    address: {
       "@type": "PostalAddress",
-      "streetAddress": "123 Haven Tower, Thane West",
-      "addressLocality": "Thane",
-      "addressRegion": "Maharashtra",
-      "postalCode": "400601",
-      "addressCountry": "India"
+      streetAddress: "123 Haven Tower, Thane West",
+      addressLocality: "Thane",
+      addressRegion: "Maharashtra",
+      postalCode: "400601",
+      addressCountry: "India",
     },
-    "contactPoint": {
+    contactPoint: {
       "@type": "ContactPoint",
-      "telephone": "+91 921 156 0084",
-      "contactType": "Customer Service",
-      "email": "info@havenglobal.com"
+      telephone: "+91 921 156 0084",
+      contactType: "Customer Service",
+      email: "connectmarketingbirbal@gmail.com",
     },
-    "sameAs": updatedSocialLinks.map(link => link.href)
+    sameAs: updatedSocialLinks.map((link) => link.href),
   };
 
   return (
@@ -312,11 +373,11 @@ const Footer = () => {
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           <CompanyInfo
-            companyName="Haven Global Living"
+            companyName="Living Luxura"
             tagline="Your Gateway to Luxury Real Estate in Thane 2025"
             address="123 Haven Tower, Thane West, Maharashtra 400601"
             phone="+91 921 156 0084"
-            email="info@havenglobal.com"
+            email="connectmarketingbirbal@gmail.com"
           />
           <QuickLinks links={navLinks || []} />
           <Newsletter />
@@ -329,7 +390,17 @@ const Footer = () => {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="border-t border-gray-700 mt-10 pt-6 text-center text-sm text-gray-400 font-sans"
         >
-          © 2025 Haven Global Living. All rights reserved.
+          © 2025 Living Luxura. All rights reserved. <br />
+          Managed and maintained by the team at{" "}
+          <motion.a
+            href="https://www.marketingbirbal.com/"
+            className="text-blue-400 hover:underline"
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+          >
+            Marketing Birbal
+          </motion.a>
+          .
         </motion.div>
       </div>
       <ScrollToTop />

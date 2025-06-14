@@ -8,6 +8,8 @@ import Hero from "../components/Hero";
 import AboutUs from "../components/AboutUs"; // Import the new component
 import Properties from "../components/Properties";
 import ContactForm from "../components/ContactForm";
+import Popup from "../components/Popup";
+import PropertyLocation from "../components/PropertyLocation";
 
 const Home = () => {
   return (
@@ -19,7 +21,9 @@ const Home = () => {
             <Hero />
             <AboutUs /> {/* Add the About Us section */}
             <Properties />
+            {/* <PropertyLocation /> */}
             <ContactForm />
+            <Popup />
           </Suspense>
         </main>
         <Footer />
