@@ -45,7 +45,7 @@ const PropertyLocation = () => {
             allowFullScreen=""
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            title="Haven Global Living Location Map"
+            title="Location Map"
           />
         </motion.div>
         <motion.p
@@ -55,7 +55,7 @@ const PropertyLocation = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center text-dark font-sans mt-4"
         >
-          📍 Haven Global Living, 123 Haven Tower, Thane West, Maharashtra
+          📍Kholset Road, Thane West, Maharashtra
           400601, India
         </motion.p>
       </motion.div>

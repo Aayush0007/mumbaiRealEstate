@@ -364,7 +364,7 @@ const Footer = () => {
     "url": "https://livingluxura.com",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "123 Haven Tower, Thane West",
+      "streetAddress": "Kolshet Road,  Thane West",
       "addressLocality": "Thane",
       "addressRegion": "Maharashtra",
       "postalCode": "400601",
@@ -394,7 +394,7 @@ const Footer = () => {
           <CompanyInfo
             companyName="Living Luxura"
             tagline="Your Gateway to Luxury Real Estate in Thane 2025"
-            address="123 Haven Tower, Thane West, Maharashtra 400601"
+            address="Kolshet Road, Thane West, Maharashtra 400601"
             phone="+91 921 156 0084"
             email="connectmarketingbirbal@gmail.com"
           />

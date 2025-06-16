@@ -118,7 +118,7 @@ const ContactForm = () => {
   const planningToBuyOptions = [
     { value: 'Soon', label: 'Soon' },
     { value: 'Within 4-6 Months', label: 'Within 4-6 Months' },
-    { value: 'Just Looking', label: 'Just Looking' },
+   // { value: 'Just Looking', label: 'Just Looking' },
   ];
 
   const validateField = (name, value) => {
@@ -404,7 +404,7 @@ const ContactForm = () => {
           </h3>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <p className="text-dark/80 font-sans">
-              📍 123 Haven Tower, Thane West, Maharashtra 400601
+              📍Kolshet Road, Thane West, Maharashtra 400601
             </p>
             <p className="text-dark/80 font-sans">
               📧 <a href="mailto:connectmarketingbirbal@gmail.com" className="hover:text-blue-600">connectmarketingbirbal@gmail.com</a>

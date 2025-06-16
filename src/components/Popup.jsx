@@ -18,7 +18,7 @@ const Popup = () => {
   const firstInputRef = useRef(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowClose(true), 5000);
+    const timer = setTimeout(() => setShowClose(true), 15000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -295,8 +295,10 @@ const Popup = () => {
                 <option value="">Select an option</option>
                 <option value="Soon">Soon</option>
                 <option value="Within 4 - 6 Months">Within 4 - 6 Months</option>
-                <option value="Just Looking">Just Looking</option>
+                
               </select>
+
+              
               {errors.buyingPlan && (
                 <motion.p
                   id="popup-buyingPlan-error"
