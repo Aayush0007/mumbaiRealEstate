@@ -26,16 +26,24 @@ const AmenitiesSection = ({ amenities }) => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.2, type: "spring" }}
-              className="bg-white/80 backdrop-blur-md p-6 rounded-xl shadow-lg border border-gray-100"
+              className="bg-white/80 backdrop-blur-md p-6 rounded-xl shadow-lg border border-gray-300"
             >
-              <h4 className="text-xl font-cinzel font-medium text-blue-600 mb-2">
-                {zone.name}
-              </h4>
+              {zone.image && (
+                <div className="w-full h-[400px]">
+                  <img
+                    className="w-full h-full object-cover rounded-xl"
+                    src={zone.image}
+                    alt={zone.name}
+                    loading="lazy"
+                  />
+                </div>
+              )}
+              <h4 className="text-xl font-cinzel font-semibold text-blue-600 mb-2 mt-3">{zone.name}</h4>
               <p className="text-dark/80 text-sm mb-4 font-sans">{zone.description}</p>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {zone.list.map((item, idx) => (
                   <li key={idx} className="text-dark/80 text-sm flex items-center">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mr-2" />
+                    <span className="w-2 h-2 bg-blue-600 rounded-full mr-2"></span>
                     {item}
                   </li>
                 ))}
@@ -49,11 +57,11 @@ const AmenitiesSection = ({ amenities }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-3"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-3"
         >
           {amenities.map((amenity, index) => (
             <li key={index} className="text-dark/80 text-sm flex items-center">
-              <span className="w-2 h-2 bg-blue-600 rounded-full mr-2" />
+              <span className="w-2 h-2 bg-blue-600 rounded-full mr-2"></span>
               {amenity}
             </li>
           ))}
@@ -63,13 +71,25 @@ const AmenitiesSection = ({ amenities }) => {
   );
 };
 
-const GallerySection = ({ gallery }) => {
-  const [currentImage, setCurrentImage] = useState(0);
+const GallerySection = ({ gallery, videos }) => {
+  const [selectedMedia, setMediaType] = useState("images");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const items = selectedMedia === "images"
+    ? gallery.map(item => ({ type: "image", src: item }))
+    : videos.map(video => ({ type: "video", ...video }));
 
-  const nextImage = () =>
-    setCurrentImage((prev) => (prev + 1) % gallery.length);
-  const prevImage = () =>
-    setCurrentImage((prev) => (prev - 1 + gallery.length) % gallery.length);
+  const nextItem = () => setCurrentIndex((prev) => (prev + 1) % items.length);
+  const prevItem = () => setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
+  const openModal = (index) => {
+    setCurrentIndex(index);
+    setIsModalOpen(true);
+  };
+  const closeModal = () => setIsModalOpen(false);
+  const handleMediaTypeChange = (type) => {
+    setMediaType(type);
+    setCurrentIndex(0);
+  };
 
   return (
     <motion.div
@@ -79,74 +99,164 @@ const GallerySection = ({ gallery }) => {
       transition={{ duration: 0.6 }}
       className="mb-16"
     >
-      <h3 className="text-4xl font-cinzel font-semibold text-dark mb-6">
-        Property Gallery
-      </h3>
+      <h3 className="text-4xl font-cinzel font-semibold text-dark mb-6">Property Gallery</h3>
+      <div className="flex items-center gap-4 mb-4">
+        <div className="relative flex space-x-4">
+          <button
+            role="tab"
+            aria-selected={selectedMedia === "images"}
+            onClick={() => handleMediaTypeChange("images")}
+            className={`text-sm font-medium font-sans transition-colors relative pb-2 ${
+              selectedMedia === "images" ? "text-blue-600" : "text-dark/80"
+            }`}
+          >
+            Images
+            {selectedMedia === "images" && (
+              <motion.div
+                className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-full"
+                layout
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              />
+            )}
+          </button>
+          <button
+            role="tab"
+            aria-selected={selectedMedia === "videos"}
+            onClick={() => handleMediaTypeChange("videos")}
+            disabled={!videos || videos.length === 0}
+            className={`text-sm font-medium font-sans transition-colors relative pb-2 ${
+              !videos || videos.length === 0 ? "opacity-50 cursor-not-allowed" : selectedMedia === "videos" ? "text-blue-600" : "text-dark/80"
+            }`}
+          >
+            Videos
+            {selectedMedia === "videos" && (
+              <motion.div
+                className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-full"
+                layout
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              />
+            )}
+          </button>
+        </div>
+      </div>
       <div className="relative">
-        <motion.img
-          key={currentImage}
-          src={gallery[currentImage]}
-          alt={`Luxury Property Gallery Image ${currentImage + 1} - Living Luxura`}
-          loading="lazy"
-          className="w-full h-[500px] object-cover rounded-xl shadow-lg"
+        <motion.div
+          key={currentIndex}
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-        />
-        <button
-          onClick={prevImage}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-blue-600/80 p-3 rounded-full text-white hover:bg-blue-600 transition-colors"
-          aria-label="Previous Image"
+          className="w-full h-[400px] rounded-lg border shadow-lg overflow-hidden cursor-pointer"
+          onClick={() => openModal(currentIndex)}
         >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M15 19l-7-7 7-7"
+          {items[currentIndex].type === "image" ? (
+            <img
+              src={items[currentIndex].src}
+              className="w-full h-full object-cover"
+              alt={`Gallery Item ${currentIndex + 1} - Living Luxura`}
+              loading="lazy"
             />
+          ) : (
+            <iframe
+              src={`https://www.youtube.com/embed/${items[currentIndex].url.split("v=")[1].split("&")[0]}`}
+              title={`Gallery Video ${currentIndex + 1} - Living Luxura`}
+              className="w-full h-full"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          )}
+        </motion.div>
+        <button
+          onClick={prevItem}
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-blue-600/50 p-3 rounded-full text-white hover:bg-blue-600 transition-colors duration-200"
+          aria-label="Previous Item"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
         <button
-          onClick={nextImage}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-600/80 p-3 rounded-full text-white hover:bg-blue-600 transition-colors"
-          aria-label="Next Image"
+          onClick={nextItem}
+          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-600/50 p-3 rounded-full text-white hover:bg-blue-600 transition-colors duration-200"
+          aria-label="Next Item"
         >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M9 5l7 7-7 7"
-            />
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
           </svg>
         </button>
         <div className="flex justify-center mt-4 space-x-2 overflow-x-auto">
-          {gallery.map((image, index) => (
+          {items.map((item, index) => (
             <motion.img
               key={index}
-              src={image}
+              src={item.type === "image" ? item.src : item.thumbnail}
               alt={`Thumbnail ${index + 1}`}
               className={`w-20 h-20 object-cover rounded-md cursor-pointer ${
-                currentImage === index ? 'border-2 border-blue-600' : 'opacity-70 hover:opacity-100'
+                currentIndex === index ? "border-2 border-blue-600" : "opacity-70 hover:opacity-100"
               }`}
-              onClick={() => setCurrentImage(index)}
+              onClick={() => setCurrentIndex(index)}
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
             />
           ))}
         </div>
       </div>
+
+      {isModalOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+          onClick={closeModal}
+        >
+          <div className="relative max-w-4xl w-full h-[80vh] p-4">
+            {items[currentIndex].type === "image" ? (
+              <img
+                src={items[currentIndex].src}
+                alt={`Full-screen Item ${currentIndex + 1}`}
+                className="w-full h-full object-contain"
+              />
+            ) : (
+              <iframe
+                src={`https://www.youtube.com/embed/${items[currentIndex].url.split("v=")[1].split("&")[0]}`}
+                title={`Full-screen Video ${currentIndex + 1}`}
+                className="w-full h-full"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            )}
+            <motion.button
+              onClick={closeModal}
+              className="absolute top-4 right-4 text-white/80 hover:text-white p-4 rounded-full hover:shadow-md transition-all duration-200"
+              whileHover={{ scale: 1.1, rotate: 90 }}
+              aria-label="Close Modal"
+            >
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </motion.button>
+            <button
+              onClick={prevItem}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-blue-600/50 p-3 rounded-full text-white hover:bg-blue-600 transition-colors duration-200"
+              aria-label="Previous Item"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              onClick={nextItem}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-600/50 p-3 rounded-full text-white hover:bg-blue-600 transition-colors duration-200"
+              aria-label="Next Item"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </motion.div>
+      )}
     </motion.div>
   );
 };
@@ -172,6 +282,26 @@ const ReraSection = ({ rera }) => (
           </li>
         ))}
       </ul>
+      {rera.qrCodes && rera.qrCodes.length > 0 ? (
+        <>
+          <h4 className="text-xl font-cinzel font-medium text-blue-600 mb-2">RERA QR Codes</h4>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+            {rera.qrCodes.map((qrCode, index) => (
+              <motion.img
+                key={index}
+                src={qrCode.url} // Use qrCode.url to access the URL from the object
+                alt={`RERA QR Code ${index + 1}`}
+                className="w-32 h-32 object-contain rounded-md hover:shadow-lg"
+                loading="lazy"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+              />
+            ))}
+          </div>
+        </>
+      ) : (
+        <p className="text-dark/80 text-sm mb-4 font-sans">No RERA QR codes available.</p>
+      )}
       <Button
         href={rera.link}
         target="_blank"
@@ -264,7 +394,6 @@ const QuickLinksSidebar = () => {
     { name: "Specifications", href: "#specifications" },
     { name: "RERA Details", href: "#rera" },
     { name: "FAQs", href: "#faqs" },
-    { name: "Virtual Tour", href: "#virtual-tour" },
   ];
 
   return (
@@ -314,9 +443,12 @@ const QuickLinksSidebar = () => {
   );
 };
 
-const ProjectDetails = ({ project, onBack }) => {
+const ProjectDetails = ({ project }) => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [planType, setPlanType] = useState("2 BHK");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
 
   const shareUrl = `${window.location.origin}/properties/${id}`;
   const shareText = `Check out ${project.projectSummary.name} - ${project.projectSummary.tagline}! A luxurious property in Thane by Living Luxura.`;
@@ -325,32 +457,22 @@ const ProjectDetails = ({ project, onBack }) => {
     {
       platform: "Facebook",
       icon: "https://cdn-icons-png.flaticon.com/512/733/733547.png",
-      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-        shareUrl
-      )}`,
+      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
     },
     {
       platform: "Twitter",
       icon: "https://cdn-icons-png.flaticon.com/512/733/733579.png",
-      url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(
-        shareUrl
-      )}&text=${encodeURIComponent(shareText)}`,
+      url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`,
     },
     {
       platform: "WhatsApp",
       icon: "https://cdn-icons-png.flaticon.com/512/733/733585.png",
-      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(
-        shareText + " " + shareUrl
-      )}`,
+      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + " " + shareUrl)}`,
     },
     {
       platform: "LinkedIn",
       icon: "https://cdn-icons-png.flaticon.com/512/733/733561.png",
-      url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(
-        shareUrl
-      )}&title=${encodeURIComponent(
-        project.projectSummary.name
-      )}&summary=${encodeURIComponent(shareText)}`,
+      url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(project.projectSummary.name)}&summary=${encodeURIComponent(shareText)}`,
     },
     {
       platform: "Instagram",
@@ -360,9 +482,7 @@ const ProjectDetails = ({ project, onBack }) => {
     {
       platform: "Pinterest",
       icon: "https://cdn-icons-png.flaticon.com/512/733/733567.png",
-      url: `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(
-        shareUrl
-      )}&description=${encodeURIComponent(shareText)}`,
+      url: `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(shareUrl)}&description=${encodeURIComponent(shareText)}`,
     },
   ];
 
@@ -373,7 +493,6 @@ const ProjectDetails = ({ project, onBack }) => {
 
   const handleNavigation = (functionality) => {
     if (functionality === "#contact") {
-      // Navigate to the homepage and scroll to #contact
       navigate("/");
       setTimeout(() => {
         const element = document.querySelector("#contact");
@@ -382,9 +501,24 @@ const ProjectDetails = ({ project, onBack }) => {
         }
       }, 100);
     } else if (functionality === "whatsapp") {
-      // Redirect to WhatsApp
       window.location.href = "https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20schedule%20a%20visit%20for%20a%20luxury%20property%20in%20Thane%20-%20livingluxura.com";
     }
+  };
+
+  const filteredPlans = project.details.plans.filter(plan =>
+    planType === "2 BHK"
+      ? ["2 BHK with Deck", "Typical Floor Plan 1", "Typical Floor Plan 2", "Master Plan"].includes(plan.type)
+      : ["3 BHK Unit Plan", "Typical Floor Plan 1", "Typical Floor Plan 2", "Master Plan"].includes(plan.type)
+  );
+
+  const openModal = (content) => {
+    setModalContent(content);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalContent(null);
   };
 
   return (
@@ -396,7 +530,7 @@ const ProjectDetails = ({ project, onBack }) => {
         className="relative h-[500px] bg-cover bg-center mb-12"
         style={{ backgroundImage: `url(${project.gallery[0]})` }}
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-dark/90 to-transparent flex items-center justify-center">
+        <div className="absolute inset-0 bg-gradient-to-b from-dark/90 to-transparent flex items-center justify-center">
           <div className="text-center text-white">
             <h1 className="text-5xl md:text-6xl font-cinzel font-bold mb-4">
               {project.projectSummary.name} - Luxury Living in Thane 2025
@@ -409,24 +543,16 @@ const ProjectDetails = ({ project, onBack }) => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.5 }}
         className="container mx-auto px-6 py-16 relative"
       >
         <div className="flex flex-col sm:flex-row justify-between items-center mb-12 gap-4">
-          <Button onClick={() => navigate("/")} className="px-6 py-2 text-sm bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-md hover:shadow-lg">
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M15 19l-7-7 7-7"
-              />
+          <Button
+            onClick={() => navigate("/")}
+            className="px-6 py-2 text-sm font-sans font-medium bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-lg hover:shadow-lg"
+          >
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
             </svg>
             Back to Properties
           </Button>
@@ -443,11 +569,7 @@ const ProjectDetails = ({ project, onBack }) => {
                 className="p-2 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors"
                 aria-label={`Share on ${link.platform}`}
               >
-                <img
-                  src={link.icon}
-                  alt={`${link.platform} icon`}
-                  className="w-8 h-8"
-                />
+                <img src={link.icon} alt={`${link.platform} icon`} className="w-8 h-8" />
               </motion.a>
             ))}
             <motion.button
@@ -457,12 +579,7 @@ const ProjectDetails = ({ project, onBack }) => {
               className="p-2 rounded-full bg-gray-100 hover:bg-blue-100 transition-colors"
               aria-label="Copy Link"
             >
-              <svg
-                className="w-8 h-8 text-dark"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-8 h-8 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -473,44 +590,6 @@ const ProjectDetails = ({ project, onBack }) => {
             </motion.button>
           </div>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, type: "spring" }}
-          className="text-center mb-16"
-        >
-          <img
-            src={project.projectSummary.logo}
-            alt={`${project.projectSummary.name} Logo - Living Luxura`}
-            loading="lazy"
-            className="w-32 h-32 mx-auto mb-4 rounded-full border-2 border-blue-600 shadow-lg object-cover"
-          />
-          <h2 className="text-4xl md:text-5xl font-cinzel font-bold text-dark mb-2 tracking-wide">
-            {project.projectSummary.name}
-          </h2>
-          <p className="text-xl text-blue-600 font-sans mb-4">
-            {project.projectSummary.tagline}
-          </p>
-          <p className="text-dark/80 text-base max-w-3xl mx-auto font-sans">
-            {project.projectSummary.description}
-          </p>
-          <ul className="flex flex-wrap justify-center gap-4 mt-6">
-            {project.projectSummary.highlights.map((highlight, index) => (
-              <motion.li
-                key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1, type: "spring" }}
-                className="bg-white/80 backdrop-blur-md px-4 py-2 rounded-full text-dark/80 text-sm shadow-lg"
-              >
-                {highlight}
-              </motion.li>
-            ))}
-          </ul>
-        </motion.div>
 
         <motion.div
           id="property-details"
@@ -548,10 +627,7 @@ const ProjectDetails = ({ project, onBack }) => {
                 </thead>
                 <tbody>
                   {project.details.configuration.map((config, index) => (
-                    <tr
-                      key={index}
-                      className="border-b border-gray-200/50 hover:bg-gray-50"
-                    >
+                    <tr key={index} className="border-b border-gray-200/50 hover:bg-gray-50">
                       <td className="px-4 py-3 font-sans">{config.type}</td>
                       <td className="px-4 py-3 font-sans">{config.size}</td>
                       <td className="px-4 py-3 font-sans">{config.layout}</td>
@@ -563,35 +639,61 @@ const ProjectDetails = ({ project, onBack }) => {
             <h4 className="text-xl font-cinzel font-medium text-blue-600 mt-6 mb-2">
               Floor Plans
             </h4>
+            <div className="flex items-center gap-4 mb-4">
+              <div className="relative flex space-x-4">
+                <button
+                  role="tab"
+                  aria-selected={planType === "2 BHK"}
+                  onClick={() => setPlanType("2 BHK")}
+                  className={`text-sm font-medium font-sans transition-colors relative pb-2 ${
+                    planType === "2 BHK" ? "text-blue-600" : "text-dark/80"
+                  }`}
+                >
+                  2 BHK
+                  {planType === "2 BHK" && (
+                    <motion.div
+                      className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-full"
+                      layout
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </button>
+                <button
+                  role="tab"
+                  aria-selected={planType === "3 BHK"}
+                  onClick={() => setPlanType("3 BHK")}
+                  className={`text-sm font-medium font-sans transition-colors relative pb-2 ${
+                    planType === "3 BHK" ? "text-blue-600" : "text-dark/80"
+                  }`}
+                >
+                  3 BHK
+                  {planType === "3 BHK" && (
+                    <motion.div
+                      className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-full"
+                      layout
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </button>
+              </div>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {project.details.plans.map((plan, index) => (
+              {filteredPlans.map((plan, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-gray-50 p-4 rounded-lg shadow-lg"
+                  className="bg-gray-50 p-4 rounded-lg shadow-lg cursor-pointer"
+                  onClick={() => openModal({ type: "image", src: plan.url })}
                 >
-                  {plan.mediaType === "image" ? (
-                    <img
-                      src={plan.url}
-                      alt={`${plan.type} Floor Plan - ${project.projectSummary.name}`}
-                      loading="lazy"
-                      className="w-full h-40 object-cover rounded-md mb-2"
-                    />
-                  ) : (
-                    <iframe
-                      src={`https://www.youtube.com/embed/${
-                        plan.url.split("v=")[1].split("&")[0]
-                      }`}
-                      title={`${plan.type} Video - ${project.projectSummary.name}`}
-                      className="w-full h-40 rounded-md mb-2"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  )}
+                  <img
+                    src={plan.url}
+                    alt={`${plan.type} Floor Plan - ${project.projectSummary.name}`}
+                    loading="lazy"
+                    className="w-full h-40 object-cover rounded-md mb-2"
+                  />
                   <p className="text-dark text-sm font-medium text-center font-sans">
                     {plan.type}
                   </p>
@@ -604,7 +706,7 @@ const ProjectDetails = ({ project, onBack }) => {
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {project.details.features.map((feature, index) => (
                 <li key={index} className="text-dark/80 text-sm flex items-center">
-                  <span className="w-2 h-2 bg-blue-600 rounded-full mr-2" />
+                  <span className="w-2 h-2 bg-blue-600 rounded-full mr-2"></span>
                   {feature}
                 </li>
               ))}
@@ -641,15 +743,10 @@ const ProjectDetails = ({ project, onBack }) => {
                 </thead>
                 <tbody>
                   {project.pricing.pricingTable.map((row, index) => (
-                    <tr
-                      key={index}
-                      className="border-b border-gray-200/50 hover:bg-gray-50"
-                    >
+                    <tr key={index} className="border-b border-gray-200/50 hover:bg-gray-50">
                       <td className="px-4 py-3 font-sans">{row.type}</td>
                       <td className="px-4 py-3 font-sans">{row.carpetArea}</td>
-                      <td className="px-4 py-3 font-sans text-blue-600">
-                        {row.price}
-                      </td>
+                      <td className="px-4 py-3 font-sans text-blue-600">{row.price}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -668,10 +765,7 @@ const ProjectDetails = ({ project, onBack }) => {
                 </h4>
                 <ul className="space-y-2">
                   {project.pricing.offers.map((offer, index) => (
-                    <li
-                      key={index}
-                      className="text-dark/80 text-sm flex items-center"
-                    >
+                    <li key={index} className="text-dark/80 text-sm flex items-center">
                       <span className="w-2 h-2 bg-blue-600 rounded-full mr-2" />
                       {offer}
                     </li>
@@ -686,7 +780,7 @@ const ProjectDetails = ({ project, onBack }) => {
           <AmenitiesSection amenities={project.amenities} />
         </div>
         <div id="gallery">
-          <GallerySection gallery={project.gallery} />
+          <GallerySection gallery={project.gallery} videos={project.videos || []} />
         </div>
 
         <motion.div
@@ -735,10 +829,7 @@ const ProjectDetails = ({ project, onBack }) => {
                 </h4>
                 <ul className="space-y-3">
                   {project.location.connectivity.map((item, index) => (
-                    <li
-                      key={index}
-                      className="text-dark/80 text-sm flex items-center"
-                    >
+                    <li key={index} className="text-dark/80 text-sm flex items-center">
                       <span className="w-2 h-2 bg-blue-600 rounded-full mr-2" />
                       {item.landmark} - {item.distance}
                     </li>
@@ -802,29 +893,6 @@ const ProjectDetails = ({ project, onBack }) => {
         </div>
 
         <motion.div
-          id="virtual-tour"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
-          <h3 className="text-4xl font-cinzel font-semibold text-dark mb-6">
-            Experience a Virtual Tour
-          </h3>
-          <div className="bg-white/80 backdrop-blur-md p-6 rounded-xl shadow-lg border border-gray-100 text-center">
-            <p className="text-dark/80 text-sm mb-4 font-sans">{project.virtualTour.description}</p>
-            <Button
-              href={project.virtualTour.link}
-              className="px-6 py-2 text-sm bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-md hover:shadow-lg"
-              aria-label="Take a Virtual Tour"
-            >
-              Take a Virtual Tour
-            </Button>
-          </div>
-        </motion.div>
-
-        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -839,7 +907,7 @@ const ProjectDetails = ({ project, onBack }) => {
               <Button
                 key={index}
                 onClick={() => handleNavigation(cta.functionality)}
-                className="px-8 py-3 text-base bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-md hover:shadow-lg"
+                className="px-8 py-3 text-base font-sans font-medium bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-lg hover:shadow-lg"
                 aria-label={cta.type}
               >
                 {cta.type}
@@ -847,9 +915,48 @@ const ProjectDetails = ({ project, onBack }) => {
             ))}
           </div>
         </motion.div>
-      </motion.div>
 
-      <QuickLinksSidebar />
+        <QuickLinksSidebar />
+
+        {isModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+            onClick={closeModal}
+          >
+            <div className="relative max-w-4xl w-full h-[80vh] p-4">
+              {modalContent.type === "image" ? (
+                <img
+                  src={modalContent.src}
+                  alt="Full-screen Floor Plan"
+                  className="w-full h-full object-contain"
+                />
+              ) : (
+                <iframe
+                  src={`https://www.youtube.com/embed/${modalContent.src.split("v=")[1].split("&")[0]}`}
+                  title="Full-screen Floor Plan Video"
+                  className="w-full h-full"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              )}
+              <motion.button
+                onClick={closeModal}
+                className="absolute top-4 right-4 text-white/80 hover:text-white p-4 rounded-full hover:shadow-md transition-all duration-200"
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                aria-label="Close Modal"
+              >
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
+      </motion.div>
     </div>
   );
 };

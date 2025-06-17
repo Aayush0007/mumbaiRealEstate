@@ -8,7 +8,7 @@ const developers = [
         id: 1,
         image: LodhaImg, 
         address: 'Lodha Amara, Kolshet Road, Thane West, Thane, Maharashtra 400607',
-        price: '₹1.40 Cr. - ₹1.80 Cr.+',
+        price: '₹1.10 Cr - ₹2.75 Cr',
         description:
           'Lodha Amara, situated in prime central Thane, offers a luxurious lifestyle with a 2-acre private forest, grand sports arena, and 25,000 sq.ft. clubhouse. Enjoy a vibrant community and seamless connectivity to Mumbai.',
         beds: '2-3',
