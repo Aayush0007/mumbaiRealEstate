@@ -114,7 +114,7 @@ const Properties = () => {
               aria-label={`Select ${developer.name} properties`}
             >
               {developer.name}
-              {selectedDeveloper === developer.name && (
+              {/* {selectedDeveloper === developer.name && (
                 <motion.div
                   layoutId="underline"
                   className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400"
@@ -122,7 +122,7 @@ const Properties = () => {
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.3 }}
                 />
-              )}
+              )} */}
             </motion.button>
           ))}
         </div>
