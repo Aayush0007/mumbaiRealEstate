@@ -341,14 +341,14 @@ const Footer = () => {
       icon: "FaFacebook",
       href:
         footerContent.socialLinks.find((l) => l.name === "Facebook")?.href ||
-        "https://www.facebook.com/living.luxura",
+        "https://www.facebook.com/livingluxura",
     },
     {
       name: "Instagram",
       icon: "FaInstagram",
       href:
         footerContent.socialLinks.find((l) => l.name === "Instagram")?.href ||
-        "https://www.instagram.com/living.luxura",
+        "https://www.instagram.com/livingluxura",
     },
     {
       name: "WhatsApp",
@@ -374,7 +374,7 @@ const Footer = () => {
       "@type": "ContactPoint",
       "telephone": "+91 921 156 0084",
       "contactType": "Customer Service",
-      "email": "connect@marketingbirbal.com",
+      "email": "connectmarketingbirbal@gmail.com",
     },
     "sameAs": updatedSocialLinks.map((link) => link.href),
   };
@@ -396,7 +396,7 @@ const Footer = () => {
             tagline="Your Gateway to Luxury Real Estate in Thane 2025"
             address="Kolshet Road, Thane West, Maharashtra 400601"
             phone="+91 921 156 0084"
-            email="connect@marketingbirbal.com"
+            email="connectmarketingbirbal@gmail.com"
           />
           <QuickLinks links={navLinks || []} />
           <Newsletter />

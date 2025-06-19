@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTimes } from 'react-icons/fa';
 
 const Popup = () => {
-  const [isOpen, setIsOpen] = useState(() => !localStorage.getItem('popupClosed'));
+  const [isOpen, setIsOpen] = useState(true);
   const [showClose, setShowClose] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -16,10 +16,9 @@ const Popup = () => {
   const [success, setSuccess] = useState(false);
   const popupRef = useRef(null);
   const firstInputRef = useRef(null);
-  const lastFocusableRef = useRef(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowClose(true), 10000);
+    const timer = setTimeout(() => setShowClose(true), 11000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -32,68 +31,50 @@ const Popup = () => {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && showClose) {
-        handleClose();
-      }
-      if (e.key === 'Tab' && isOpen) {
-        const focusable = popupRef.current.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
+        setIsOpen(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, showClose]);
+  }, [showClose]);
 
-  const validateField = useCallback((name, value) => {
+  const validateField = (name, value) => {
+    if (name === 'name' && !value.trim()) return 'Name is required';
     if (name === 'phone') {
-      if (!value.trim()) return 'Phone number is required';
-      if (!/^[6-9]\d{9}$/.test(value.replace(/\D/g, ''))) return 'Enter a valid 10-digit Indian mobile number';
+      const cleaned = value.replace(/\D/g, '');
+      if (!cleaned) return 'Phone number is required';
+      if (!/^[6-9]\d{9}$/.test(cleaned)) return 'Enter a valid 10-digit Indian phone number';
     }
-    // Optional fields: only validate if filled
-    if (name === 'name' && value.trim() && value.length < 2) return 'Name must be at least 2 characters';
-    if (name === 'lookingFor' && value && !['Property to Buy', 'Property For Investment'].includes(value)) return 'Invalid option';
-    if (name === 'buyingPlan' && value && !['Soon', 'Within 4 - 6 Months', 'Later'].includes(value)) return 'Invalid option';
+    if (name === 'lookingFor' && !value) return 'Please select an option';
+    if (name === 'buyingPlan' && !value) return 'Please select an option';
     return '';
-  }, []);
+  };
 
-  const handleChange = useCallback((e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // Limit phone to digits only and max 10 characters
     if (name === 'phone') {
-      // Allow only digits and limit to 10
-      const cleanedValue = value.replace(/\D/g, '').slice(0, 10);
-      setFormData((prev) => ({ ...prev, [name]: cleanedValue }));
-      setErrors((prev) => ({ ...prev, [name]: validateField(name, cleanedValue) }));
+      const cleaned = value.replace(/\D/g, '');
+      if (cleaned.length > 10) return;
+      setFormData((prev) => ({ ...prev, [name]: cleaned }));
+      setErrors((prev) => ({ ...prev, [name]: validateField(name, cleaned) }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
       setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
     }
-  }, [validateField]);
+  };
 
-  const handleBlur = useCallback((e) => {
+  const handleBlur = (e) => {
     const { name, value } = e.target;
     setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
-  }, [validateField]);
+  };
 
-  const handleClose = useCallback(() => {
-    setIsOpen(false);
-    localStorage.setItem('popupClosed', 'true');
-  }, []);
-
-  const handleSubmit = useCallback(async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newErrors = { phone: validateField('phone', formData.phone) };
-    // Only validate optional fields if they have values
-    ['name', 'lookingFor', 'buyingPlan'].forEach((field) => {
-      if (formData[field]) newErrors[field] = validateField(field, formData[field]);
+    const newErrors = {};
+    ['name', 'phone', 'lookingFor', 'buyingPlan'].forEach((field) => {
+      newErrors[field] = validateField(field, formData[field]);
     });
 
     if (Object.values(newErrors).some((error) => error)) {
@@ -102,11 +83,12 @@ const Popup = () => {
     }
 
     setIsSubmitting(true);
-    setErrors({}); // Clear previous form errors
     try {
       const response = await fetch('/api/macros/s/AKfycbxWToaoFBkzLC2klLCMM5yWbwrWMAUxNlkpv3txG0ckxhYxMn-y9N-Sx8OCKxtWKnIHcA/exec', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ ...formData, formType: 'popup' }),
       });
       const result = await response.json();
@@ -115,7 +97,7 @@ const Popup = () => {
         setErrors({});
         setSuccess(true);
         setTimeout(() => {
-          handleClose();
+          setIsOpen(false);
           setSuccess(false);
         }, 2000);
       } else {
@@ -127,19 +109,18 @@ const Popup = () => {
     } finally {
       setIsSubmitting(false);
     }
-  }, [formData, validateField, handleClose]);
+  };
 
   if (!isOpen) return null;
 
   return (
     <AnimatePresence>
       <motion.div
-        key="popup"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
-        className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+        className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 font-inter"
         role="dialog"
         aria-modal="true"
         aria-labelledby="popup-title"
@@ -150,29 +131,25 @@ const Popup = () => {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           transition={{ duration: 0.5, type: 'spring' }}
-          className="relative bg-white/90 backdrop-blur-lg p-6 rounded-2xl shadow-xl max-w-sm w-full mx-4 border border-gray-200"
+          className="relative bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-lg max-w-sm w-full mx-4 border border-gray-100 font-inter"
         >
           {showClose && (
             <motion.button
-              type="button"
-              onClick={handleClose}
+              onClick={() => setIsOpen(false)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
-              className="absolute top-3 right-3 text-gray-700 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="absolute top-3 right-3 text-dark hover:text-blue-600"
               aria-label="Close popup"
             >
               <FaTimes size={18} />
             </motion.button>
           )}
 
-          <h2
-            id="popup-title"
-            className="text-2xl font-playfair font-bold text-gray-800 mb-3 text-center"
-          >
+          <h2 id="popup-title" className="text-xl font-bold text-dark mb-3 text-center">
             Welcome to Living Luxura
           </h2>
-          <p className="text-center text-sm text-gray-600 mb-4 font-inter">
+          <p className="text-center text-xs text-dark/80 mb-4">
             Share your details to explore luxury properties!
           </p>
 
@@ -180,7 +157,7 @@ const Popup = () => {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-blue-50 text-blue-700 p-2 rounded-lg mb-3 text-center text-sm font-inter"
+              className="bg-blue-100 text-dark p-2 rounded-lg mb-3 text-center text-xs"
             >
               Thank you! We’ll contact you soon.
             </motion.div>
@@ -190,19 +167,16 @@ const Popup = () => {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-red-50 text-red-600 p-2 rounded-lg mb-3 text-center text-sm font-inter"
+              className="bg-red-100 text-red-500 p-2 rounded-lg mb-3 text-center text-xs"
             >
               {errors.form}
             </motion.div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+          <form onSubmit={handleSubmit} className="space-y-3" noValidate>
             <div>
-              <label
-                htmlFor="popup-name"
-                className="block text-gray-700 text-sm font-semibold mb-1 font-inter"
-              >
-                Name
+              <label htmlFor="popup-name" className="block text-dark text-xs font-semibold mb-1">
+                Name <span className="text-red-500">*</span>
               </label>
               <input
                 ref={firstInputRef}
@@ -212,31 +186,20 @@ const Popup = () => {
                 value={formData.name}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                className={`w-full py-2 px-3 rounded-lg bg-white text-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-inter ${
-                  errors.name ? 'border-2 border-red-500' : 'border border-gray-300'
+                className={`w-full py-1 px-2 rounded-lg bg-white/80 text-dark shadow-md focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm ${
+                  errors.name ? 'border-2 border-red-500' : 'border border-gray-200'
                 }`}
                 placeholder="Your Full Name"
-                aria-invalid={!!errors.name}
-                aria-describedby={errors.name ? 'popup-name-error' : undefined}
+                required
               />
               {errors.name && (
-                <motion.p
-                  id="popup-name-error"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-red-600 text-xs mt-1 font-inter"
-                >
-                  {errors.name}
-                </motion.p>
+                <motion.p className="text-red-500 text-xs mt-1">{errors.name}</motion.p>
               )}
             </div>
 
             <div>
-              <label
-                htmlFor="popup-phone"
-                className="block text-gray-700 text-sm font-semibold mb-1 font-inter"
-              >
-                Mobile No. <span className="text-red-600">*</span>
+              <label htmlFor="popup-phone" className="block text-dark text-xs font-semibold mb-1">
+                Mobile No. <span className="text-red-500">*</span>
               </label>
               <input
                 type="tel"
@@ -245,34 +208,22 @@ const Popup = () => {
                 value={formData.phone}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                maxLength={10}
-                className={`w-full py-2 px-3 rounded-lg bg-white text-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-inter ${
-                  errors.phone ? 'border-2 border-red-500' : 'border border-gray-300'
+                maxLength="10"
+                pattern="[6-9]{1}[0-9]{9}"
+                className={`w-full py-1 px-2 rounded-lg bg-white/80 text-dark shadow-md focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm ${
+                  errors.phone ? 'border-2 border-red-500' : 'border border-gray-200'
                 }`}
-                placeholder="Enter 10-digit number"
-                aria-invalid={!!errors.phone}
-                aria-describedby={errors.phone ? 'popup-phone-error' : undefined}
-                aria-required="true"
+                placeholder="Enter 10-digit phone number"
                 required
               />
               {errors.phone && (
-                <motion.p
-                  id="popup-phone-error"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-red-600 text-xs mt-1 font-inter"
-                >
-                  {errors.phone}
-                </motion.p>
+                <motion.p className="text-red-500 text-xs mt-1">{errors.phone}</motion.p>
               )}
             </div>
 
             <div>
-              <label
-                htmlFor="popup-lookingFor"
-                className="block text-gray-700 text-sm font-semibold mb-1 font-inter"
-              >
-                You are looking for
+              <label htmlFor="popup-lookingFor" className="block text-dark text-xs font-semibold mb-1">
+                You are looking for <span className="text-red-500">*</span>
               </label>
               <select
                 id="popup-lookingFor"
@@ -280,34 +231,23 @@ const Popup = () => {
                 value={formData.lookingFor}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                className={`w-full py-2 px-3 rounded-lg bg-white text-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-inter ${
-                  errors.lookingFor ? 'border-2 border-red-500' : 'border border-gray-300'
+                className={`w-full py-1 px-2 rounded-lg bg-white/80 text-dark shadow-md focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm ${
+                  errors.lookingFor ? 'border-2 border-red-500' : 'border border-gray-200'
                 }`}
-                aria-invalid={!!errors.lookingFor}
-                aria-describedby={errors.lookingFor ? 'popup-lookingFor-error' : undefined}
+                required
               >
-                <option value="">Select an option (Optional)</option>
+                <option value="">Select an option</option>
                 <option value="Property to Buy">Property to Buy</option>
                 <option value="Property For Investment">Property For Investment</option>
               </select>
               {errors.lookingFor && (
-                <motion.p
-                  id="popup-lookingFor-error"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-red-600 text-xs mt-1 font-inter"
-                >
-                  {errors.lookingFor}
-                </motion.p>
+                <motion.p className="text-red-500 text-xs mt-1">{errors.lookingFor}</motion.p>
               )}
             </div>
 
             <div>
-              <label
-                htmlFor="popup-buyingPlan"
-                className="block text-gray-700 text-sm font-semibold mb-1 font-inter"
-              >
-                Planning to buy
+              <label htmlFor="popup-buyingPlan" className="block text-dark text-xs font-semibold mb-1">
+                Planning to buy <span className="text-red-500">*</span>
               </label>
               <select
                 id="popup-buyingPlan"
@@ -315,44 +255,32 @@ const Popup = () => {
                 value={formData.buyingPlan}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                className={`w-full py-2 px-3 rounded-lg bg-white text-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-inter ${
-                  errors.buyingPlan ? 'border-2 border-red-500' : 'border border-gray-300'
+                className={`w-full py-1 px-2 rounded-lg bg-white/80 text-dark shadow-md focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm ${
+                  errors.buyingPlan ? 'border-2 border-red-500' : 'border border-gray-200'
                 }`}
-                aria-invalid={!!errors.buyingPlan}
-                aria-describedby={errors.buyingPlan ? 'popup-buyingPlan-error' : undefined}
-                ref={lastFocusableRef}
+                required
               >
-                <option value="">Select an option (Optional)</option>
+                <option value="">Select an option</option>
                 <option value="Soon">Soon</option>
                 <option value="Within 4 - 6 Months">Within 4 - 6 Months</option>
-                <option value="Later">Later</option>
               </select>
               {errors.buyingPlan && (
-                <motion.p
-                  id="popup-buyingPlan-error"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-red-600 text-xs mt-1 font-inter"
-                >
-                  {errors.buyingPlan}
-                </motion.p>
+                <motion.p className="text-red-500 text-xs mt-1">{errors.buyingPlan}</motion.p>
               )}
             </div>
 
-            <div className="flex justify-center mt-5">
-              <motion.button
+            <div className="flex justify-center mt-4">
+              <button
                 type="submit"
                 disabled={isSubmitting}
-                whileHover={{ scale: isSubmitting ? 1 : 1.05 }}
-                whileTap={{ scale: isSubmitting ? 1 : 0.95 }}
-                className={`px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-lg font-inter text-sm shadow-md ${
+                className={`px-4 py-1 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-md text-sm ${
                   isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg'
                 }`}
               >
                 {isSubmitting ? (
                   <div className="flex items-center">
                     <svg
-                      className="animate-spin h-4 w-4 mr-2 text-white"
+                      className="animate-spin h-4 w-4 mr-1 text-white"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -376,7 +304,7 @@ const Popup = () => {
                 ) : (
                   'Submit'
                 )}
-              </motion.button>
+              </button>
             </div>
           </form>
         </motion.div>
