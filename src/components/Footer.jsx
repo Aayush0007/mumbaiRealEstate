@@ -104,7 +104,7 @@ const QuickLinks = ({ links }) => {
   const navigate = useNavigate();
   const additionalLinks = [
     { name: "Privacy Policy", href: "/privacy-policy" },
-    { name: "Terms of Service", href: "/terms-of-service" },
+    { name: "Terms of Service", href: "/privacy-policy" },
   ];
   const allLinks = [...links, ...additionalLinks];
 
@@ -181,23 +181,26 @@ const Newsletter = () => {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/macros/s/AKfycbxWToaoFBkzLC2klLCMM5yWbwrWMAUxNlkpv3txG0ckxhYxMn-y9N-Sx8OCKxtWKnIHcA/exec', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, formType: 'newsletter' }),
-      });
+      const response = await fetch(
+        "/api/macros/s/AKfycbxWToaoFBkzLC2klLCMM5yWbwrWMAUxNlkpv3txG0ckxhYxMn-y9N-Sx8OCKxtWKnIHcA/exec",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, formType: "newsletter" }),
+        }
+      );
       const result = await response.json();
-      if (result.status === 'success') {
+      if (result.status === "success") {
         setEmail("");
         setMessage("Subscribed successfully! Stay tuned for updates.");
         setTimeout(() => setMessage(""), 3000);
       } else {
-        throw new Error(result.message || 'Failed to subscribe');
+        throw new Error(result.message || "Failed to subscribe");
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error("Error submitting form:", error);
       setMessage("Failed to subscribe. Please try again later.");
     } finally {
       setIsSubmitting(false);
@@ -348,7 +351,7 @@ const Footer = () => {
       icon: "FaInstagram",
       href:
         footerContent.socialLinks.find((l) => l.name === "Instagram")?.href ||
-        "https://www.instagram.com/livingluxura",
+        "https://www.instagram.com/living.luxura",
     },
     {
       name: "WhatsApp",
@@ -360,23 +363,23 @@ const Footer = () => {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Living Luxura",
-    "url": "https://livingluxura.com",
-    "address": {
+    name: "Living Luxura",
+    url: "https://livingluxura.com",
+    address: {
       "@type": "PostalAddress",
-      "streetAddress": "Kolshet Road,  Thane West",
-      "addressLocality": "Thane",
-      "addressRegion": "Maharashtra",
-      "postalCode": "400601",
-      "addressCountry": "India",
+      streetAddress: "Kolshet Road,  Thane West",
+      addressLocality: "Thane",
+      addressRegion: "Maharashtra",
+      postalCode: "400601",
+      addressCountry: "India",
     },
-    "contactPoint": {
+    contactPoint: {
       "@type": "ContactPoint",
-      "telephone": "+91 921 156 0084",
-      "contactType": "Customer Service",
-      "email": "connectmarketingbirbal@gmail.com",
+      telephone: "+91 921 156 0084",
+      contactType: "Customer Service",
+      email: "connectmarketingbirbal@gmail.com",
     },
-    "sameAs": updatedSocialLinks.map((link) => link.href),
+    sameAs: updatedSocialLinks.map((link) => link.href),
   };
 
   return (
@@ -419,7 +422,13 @@ const Footer = () => {
           >
             Marketing Birbal
           </motion.a>
-          .
+          .{" "}
+          <a
+            href="/privacy-policy"
+            className="text-blue-400 hover:underline ml-1"
+          >
+            Privacy Policy
+          </a>
         </motion.div>
       </div>
       <ScrollToTop />

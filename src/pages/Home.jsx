@@ -26,7 +26,7 @@ const Home = () => {
             <Popup />
           </Suspense>
         </main>
-        <Footer />
+        <Footer />  
       </div>
     </ErrorBoundary>
   );
