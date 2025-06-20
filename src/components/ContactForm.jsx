@@ -418,7 +418,7 @@ const ContactForm = () => {
               📍Kolshet Road, Thane West, Maharashtra 400601
             </p>
             <p className="text-dark/80 font-sans">
-              📧 <a href="mailto:connectmarketingbirbal@gmail.com" className="hover:text-blue-600">connectmarketingbirbal@gmail.com</a>
+              📧 <a href="mailto:connect@marketingbirbal.com" className="hover:text-blue-600">connect@marketingbirbal.com</a>
             </p>
             <motion.a
               href="https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20inquire%20about%20luxury%20properties%20in%20Thane%20-%20livingluxura.com"
