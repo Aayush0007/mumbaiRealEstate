@@ -35,7 +35,7 @@ const Hero = () => {
           transition={{ duration: 1, ease: 'easeOut' }}
           className="text-5xl md:text-7xl font-cinzel font-bold leading-tight mb-4 drop-shadow-lg tracking-tight text-white"
         >
-          Luxury Homes for Modern Living in 2025
+          Luxury Homes in Thane, Mumbai.
         </motion.h1>
 
         <motion.p
@@ -44,7 +44,7 @@ const Hero = () => {
           transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
           className="text-lg md:text-2xl font-sans font-light tracking-wide mb-4 opacity-90 text-white drop-shadow-lg"
         >
-          Discover your dream property in the heart of the city with Living Luxura.
+          Discover your dream property in the heart of Mumbai with Living Luxura.
         </motion.p>
 
         <motion.p
@@ -63,14 +63,15 @@ const Hero = () => {
           className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6"
         >
           <Button
-            href="#properties"
+            href="#contact"
             className="text-lg font-cinzel font-medium px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white rounded-md transition-all duration-300 shadow-md hover:shadow-lg"
             whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(59, 130, 246, 0.5)" }}
           >
-            Explore Dream Properties
+            Book a call
           </Button>
+          
           <Button
-            href="https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20schedule%20a%20tour%20with%Living%20Luxura%20Living."
+            href="https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20schedule%20a%20tour%20with%20Living%20Luxura."
             target="_blank"
             rel="noopener noreferrer"
             className="text-lg font-cinzel font-medium px-8 py-3 border-2 border-white text-white hover:bg-white hover:text-dark rounded-md transition-all duration-300"

@@ -23,7 +23,7 @@ const Home = () => {
             <Properties />
             <PropertyLocation />
             <ContactForm />
-            <Popup />
+            {/* <Popup /> */}
           </Suspense>
         </main>
         <Footer />  
