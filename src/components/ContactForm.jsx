@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Button from './common/Button';
 import Section from './common/Section';
 
-const FormField = ({ id, label, type = 'text', name, value, onChange, onBlur, error, placeholder, rows, required, icon }) => (
+const FormField = ({ id, label, type = 'text', name, value, onChange, onBlur, error, placeholder, required, icon }) => (
   <div className="relative">
     <label htmlFor={id} className="block text-dark text-sm font-semibold mb-2 font-sans">
       {label} {required && <span className="text-red-500">*</span>}
@@ -14,35 +14,19 @@ const FormField = ({ id, label, type = 'text', name, value, onChange, onBlur, er
           {icon}
         </span>
       )}
-      {type === 'textarea' ? (
-        <textarea
-          id={id}
-          name={name}
-          value={value}
-          onChange={onChange}
-          onBlur={onBlur}
-          rows={rows}
-          className={`w-full py-3 ${icon ? 'pl-10' : 'pl-4'} pr-4 rounded-lg bg-white/80 text-dark shadow-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all ${error && name !== 'email' ? 'border-2 border-red-500' : 'border border-gray-200'}`}
-          placeholder={placeholder}
-          aria-invalid={!!error}
-          aria-describedby={error ? `${id}-error` : undefined}
-          required={required}
-        />
-      ) : (
-        <input
-          type={type}
-          id={id}
-          name={name}
-          value={value}
-          onChange={onChange}
-          onBlur={onBlur}
-          className={`w-full py-3 ${icon ? 'pl-10' : 'pl-4'} pr-4 rounded-lg bg-white/80 text-dark shadow-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all ${error && name !== 'email' ? 'border-2 border-red-500' : 'border border-gray-200'}`}
-          placeholder={placeholder}
-          aria-invalid={!!error}
-          aria-describedby={error ? `${id}-error` : undefined}
-          required={required}
-        />
-      )}
+      <input
+        type={type}
+        id={id}
+        name={name}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        className={`w-full py-3 ${icon ? 'pl-10' : 'pl-4'} pr-4 rounded-lg bg-white/80 text-dark shadow-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all ${error ? 'border-2 border-red-500' : 'border border-gray-200'}`}
+        placeholder={placeholder}
+        aria-invalid={!!error}
+        aria-describedby={error ? `${id}-error` : undefined}
+        required={required}
+      />
     </div>
     {error && (
       <motion.p
@@ -61,10 +45,8 @@ const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     mobile: '',
-    email: '',
-    lookingFor: '',
-    planningToBuy: '',
-    message: '',
+    livingIn: '',
+    propertyLocation: '',
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -89,35 +71,16 @@ const ContactForm = () => {
       required: true,
       icon: '📞',
     },
-    {
-      id: 'email',
-      label: 'Email (Optional)',
-      name: 'email',
-      type: 'email',
-      placeholder: 'your.email@example.com',
-      required: false,
-      icon: '📧',
-    },
-    {
-      id: 'message',
-      label: 'Message',
-      name: 'message',
-      type: 'textarea',
-      placeholder: 'Tell us about your property needs...',
-      rows: 5,
-      required: true,
-      icon: '💬',
-    },
   ];
 
-  const lookingForOptions = [
-    { value: 'Property to Buy', label: 'Property to Buy' },
-    { value: 'Property for Investment', label: 'Property for Investment' },
+  const livingInOptions = [
+    { value: 'Mumbai', label: 'Mumbai' },
+    { value: 'Outside Mumbai', label: 'Outside Mumbai' },
   ];
 
-  const planningToBuyOptions = [
-    { value: 'Soon', label: 'Soon' },
-    { value: 'Within 4-6 Months', label: 'Within 4-6 Months' },
+  const propertyLocationOptions = [
+    { value: 'Thane, Mumbai', label: 'Thane, Mumbai' },
+    { value: 'Outside Thane', label: 'Outside Thane' },
   ];
 
   const validateField = (name, value) => {
@@ -129,10 +92,8 @@ const ContactForm = () => {
         return 'Mobile number must be a valid 10-digit Indian number starting with 6, 7, 8, or 9';
       }
     }
-    if (name === 'email' && value.trim() && !/\S+@\S+\.\S+/.test(value)) return 'Invalid email format';
-    if (name === 'lookingFor' && !value) return 'Please select an option';
-    if (name === 'planningToBuy' && !value) return 'Please select an option';
-    if (name === 'message' && !value.trim()) return 'Message is required';
+    if (name === 'livingIn' && !value) return 'Please select an option';
+    if (name === 'propertyLocation' && !value) return 'Please select an option';
     return '';
   };
 
@@ -159,7 +120,7 @@ const ContactForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
-    ['name', 'mobile', 'email', 'lookingFor', 'planningToBuy', 'message'].forEach((field) => {
+    ['name', 'mobile', 'livingIn', 'propertyLocation'].forEach((field) => {
       newErrors[field] = validateField(field, formData[field]);
     });
 
@@ -170,7 +131,7 @@ const ContactForm = () => {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/macros/s/AKfycbxWToaoFBkzLC2klLCMM5yWbwrWMAUxNlkpv3txG0ckxhYxMn-y9N-Sx8OCKxtWKnIHcA/exec', {
+      const response = await fetch('/api/macros/s/AKfycbwdsD5WMs2vlP-GOUPB-LZeIOcW4hmAkTgmydg1uWzPApUvf1z5Bvouv3wXDjk_vtfbaw/exec', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -179,7 +140,7 @@ const ContactForm = () => {
       });
       const result = await response.json();
       if (result.status === 'success') {
-        setFormData({ name: '', mobile: '', email: '', lookingFor: '', planningToBuy: '', message: '' });
+        setFormData({ name: '', mobile: '', livingIn: '', propertyLocation: '' });
         setErrors({});
         setSuccess(true);
         setTimeout(() => setSuccess(false), 3000);
@@ -212,7 +173,7 @@ const ContactForm = () => {
           transition={{ duration: 0.6 }}
           className="text-4xl md:text-5xl font-cinzel font-bold text-center text-dark mb-4"
         >
-          Contact Us for Luxury Properties in Thane 2025
+          Contact Us for Luxury Properties in Thane, Mumbai
         </motion.h2>
         <motion.p
           initial={{ opacity: 0, y: -30 }}
@@ -221,7 +182,7 @@ const ContactForm = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-center text-lg md:text-xl font-sans text-dark/80 max-w-3xl mx-auto mb-8"
         >
-          Let’s find your dream home! Schedule a property tour or inquire about exclusive homes with Living Luxura.
+          Let’s find your dream home! Share your details to inquire about exclusive homes with Living Luxura.
         </motion.p>
         <motion.div
           initial={{ width: 0 }}
@@ -261,7 +222,7 @@ const ContactForm = () => {
                   d="M5 13l4 4L19 7"
                 />
               </motion.svg>
-              Message sent successfully! We’ll get back to you soon.
+              Form submitted successfully! We’ll get back to you soon.
             </motion.div>
           )}
           {errors.form && (
@@ -287,16 +248,16 @@ const ContactForm = () => {
 
             <div>
               <label className="block text-dark text-sm font-semibold mb-2 font-sans">
-                You are looking for <span className="text-red-500">*</span>
+                You are living in? <span className="text-red-500">*</span>
               </label>
               <div className="flex flex-wrap gap-4">
-                {lookingForOptions.map((option) => (
+                {livingInOptions.map((option) => (
                   <label key={option.value} className="flex items-center">
                     <input
                       type="radio"
-                      name="lookingFor"
+                      name="livingIn"
                       value={option.value}
-                      checked={formData.lookingFor === option.value}
+                      checked={formData.livingIn === option.value}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className="hidden"
@@ -304,7 +265,7 @@ const ContactForm = () => {
                     />
                     <span
                       className={`flex items-center px-4 py-2 rounded-md border cursor-pointer transition-all ${
-                        formData.lookingFor === option.value
+                        formData.livingIn === option.value
                           ? 'bg-blue-600 text-white border-blue-600'
                           : 'bg-white/80 border-gray-200 hover:border-blue-600'
                       }`}
@@ -314,29 +275,29 @@ const ContactForm = () => {
                   </label>
                 ))}
               </div>
-              {errors.lookingFor && (
+              {errors.livingIn && (
                 <motion.p
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   className="text-red-500 text-sm mt-1"
                 >
-                  {errors.lookingFor}
+                  {errors.livingIn}
                 </motion.p>
               )}
             </div>
 
             <div>
               <label className="block text-dark text-sm font-semibold mb-2 font-sans">
-                When are you planning to buy property <span className="text-red-500">*</span>
+                Looking for property in... <span className="text-red-500">*</span>
               </label>
               <div className="flex flex-wrap gap-4">
-                {planningToBuyOptions.map((option) => (
+                {propertyLocationOptions.map((option) => (
                   <label key={option.value} className="flex items-center">
                     <input
                       type="radio"
-                      name="planningToBuy"
+                      name="propertyLocation"
                       value={option.value}
-                      checked={formData.planningToBuy === option.value}
+                      checked={formData.propertyLocation === option.value}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className="hidden"
@@ -344,7 +305,7 @@ const ContactForm = () => {
                     />
                     <span
                       className={`flex items-center px-4 py-2 rounded-md border cursor-pointer transition-all ${
-                        formData.planningToBuy === option.value
+                        formData.propertyLocation === option.value
                           ? 'bg-blue-600 text-white border-blue-600'
                           : 'bg-white/80 border-gray-200 hover:border-blue-600'
                       }`}
@@ -354,13 +315,13 @@ const ContactForm = () => {
                   </label>
                 ))}
               </div>
-              {errors.planningToBuy && (
+              {errors.propertyLocation && (
                 <motion.p
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   className="text-red-500 text-sm mt-1"
                 >
-                  {errors.planningToBuy}
+                  {errors.propertyLocation}
                 </motion.p>
               )}
             </div>
@@ -396,40 +357,11 @@ const ContactForm = () => {
                     Sending...
                   </div>
                 ) : (
-                  'Send Message'
+                  'Submit'
                 )}
               </Button>
             </div>
           </form>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="max-w-2xl mx-auto mt-12 text-center"
-        >
-          <h3 className="text-2xl font-cinzel font-semibold text-dark mb-6">
-            Other Ways to Reach Us
-          </h3>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <p className="text-dark/80 font-sans">
-              📍Kolshet Road, Thane West, Maharashtra 400601
-            </p>
-            <p className="text-dark/80 font-sans">
-              📧 <a href="mailto:connect@marketingbirbal.com" className="hover:text-blue-600">connect@marketingbirbal.com</a>
-            </p>
-            <motion.a
-              href="https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20inquire%20about%20luxury%20properties%20in%20Thane%20-%20livingluxura.com"
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-              whileHover={{ scale: 1.05 }}
-              className="text-dark/80 font-sans hover:text-blue-600"
-            >
-              📲 Chat on WhatsApp
-            </motion.a>
-          </div>
         </motion.div>
       </motion.div>
     </Section>

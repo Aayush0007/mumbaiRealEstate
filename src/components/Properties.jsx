@@ -80,7 +80,7 @@ const Properties = () => {
           transition={{ duration: 0.8 }}
           className="text-4xl md:text-5xl font-cinzel font-bold text-center text-dark mb-4 tracking-wide"
         >
-          Explore Luxury Properties in Thane 2025
+          Explore Luxury Properties in Thane, Mumbai
         </motion.h2>
         <motion.p
           initial={{ opacity: 0, y: -30 }}

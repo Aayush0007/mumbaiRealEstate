@@ -49,7 +49,7 @@ const AboutUs = () => {
           transition={{ duration: 0.7 }}
           className="text-dark/80 text-base md:text-lg leading-relaxed max-w-4xl mx-auto mb-6 font-sans"
         >
-          At Living Luxura, we redefine luxury real estate in 2025 by curating exclusive properties that embody modern elegance and timeless comfort. Our mission is to transform the way you experience home, offering a seamless journey to find your dream property in prime city locations. With a team of dedicated real estate experts, we ensure every step is tailored to your unique vision.
+          At Living Luxura, we redefine luxury real estate in Thane, Mumbai by curating exclusive properties that embody modern elegance and timeless comfort. Our mission is to transform the way you experience home, offering a seamless journey to find your dream property in prime city locations. With a team of dedicated real estate experts, we ensure every step is tailored to your unique vision.
         </motion.p>
 
         <motion.p
@@ -73,8 +73,9 @@ const AboutUs = () => {
         </motion.p>
 
         <motion.a
-          href="https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20learn%20more%20about%20Living%20Luxura%20and%20your%20luxury%20properties."
-          target="_blank"
+          // href="https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20learn%20more%20about%20Living%20Luxura%20and%20your%20luxury%20properties."
+          href="#contact"
+          // target="_blank"
           rel="noopener noreferrer"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}

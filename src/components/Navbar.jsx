@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { navLinks } from "../data/data";
-import { FaBars, FaTimes, FaWhatsapp } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../assets/Logo.png";
 
@@ -134,19 +134,6 @@ const Navbar = () => {
               </motion.li>
             ))}
           </ul>
-          <motion.a
-            href="https://wa.me/9211560084?text=Hello,%20I'm%20interested%20in%20exploring%20properties%20with%20Living%20Luxura.%20Can%20you%20help%20me?"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden md:flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-cinzel font-medium text-base px-6 py-2 rounded-md transition-all duration-300 shadow-md hover:shadow-lg"
-            whileHover={{
-              scale: 1.05,
-              boxShadow: "0 0 15px rgba(59, 130, 246, 0.5)",
-            }}
-          >
-            <FaWhatsapp className="text-lg" />
-            Get Started
-          </motion.a>
           <button
             onClick={toggleMenu}
             className="md:hidden text-white focus:outline-none focus:ring-2 focus:ring-blue-400 rounded"
@@ -191,25 +178,6 @@ const Navbar = () => {
                   </button>
                 </motion.li>
               ))}
-              <motion.li
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: navLinks.length * 0.1, duration: 0.5 }}
-              >
-                <motion.a
-                  href="https://wa.me/9211560084?text=Hello,%20I'm%20interested%20in%20exploring%20properties%20with%20Living%20Luxura.%20Can%20you%20help%20me?"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-cinzel font-medium text-base px-6 py-2 rounded-md transition-all duration-300 shadow-md hover:shadow-lg"
-                  whileHover={{
-                    scale: 1.05,
-                    boxShadow: "0 0 15px rgba(59, 130, 246, 0.5)",
-                  }}
-                >
-                  <FaWhatsapp className="text-lg" />
-                  Get Started
-                </motion.a>
-              </motion.li>
             </ul>
           </motion.div>
         )}

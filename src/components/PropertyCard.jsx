@@ -24,7 +24,7 @@ const PropertyCard = ({ property, onViewDetails }) => {
       <div className="relative">
         <motion.img
           src={property.image}
-          alt={`${property.address} - Luxury Property in Thane 2025`}
+          alt={`${property.address} - Luxury Property in Thane, Mumbai`}
           loading="lazy"
           className="w-full h-64 object-cover"
           whileHover={{ scale: 1.05 }}
@@ -60,7 +60,7 @@ const PropertyCard = ({ property, onViewDetails }) => {
           >
             View Details
           </motion.button>
-          <motion.a
+          {/* <motion.a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer nofollow"
@@ -72,7 +72,7 @@ const PropertyCard = ({ property, onViewDetails }) => {
             title={`Schedule a tour for ${property.address} via WhatsApp`}
           >
             Schedule a Tour
-          </motion.a>
+          </motion.a> */}
         </div>
       </div>
     </motion.div>

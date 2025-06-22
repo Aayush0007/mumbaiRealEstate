@@ -84,7 +84,7 @@ const Popup = () => {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/macros/s/AKfycbxWToaoFBkzLC2klLCMM5yWbwrWMAUxNlkpv3txG0ckxhYxMn-y9N-Sx8OCKxtWKnIHcA/exec', {
+      const response = await fetch('/api/macros/s/AKfycbwdsD5WMs2vlP-GOUPB-LZeIOcW4hmAkTgmydg1uWzPApUvf1z5Bvouv3wXDjk_vtfbaw/exec', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

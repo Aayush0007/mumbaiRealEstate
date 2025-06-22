@@ -1,28 +1,11 @@
 import { motion } from "framer-motion";
-import {
-  FaFacebook,
-  FaTwitter,
-  FaInstagram,
-  FaLinkedin,
-  FaPinterest,
-  FaWhatsapp,
-  FaArrowUp,
-} from "react-icons/fa";
+import { FaArrowUp } from "react-icons/fa";
 import { footerContent, navLinks } from "../data/data";
 import { useTheme } from "../context/ThemeContext";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const iconMap = {
-  FaFacebook,
-  FaTwitter,
-  FaInstagram,
-  FaLinkedin,
-  FaPinterest,
-  FaWhatsapp,
-};
-
-const CompanyInfo = ({ companyName, address, phone, email, tagline }) => {
+const CompanyInfo = ({ companyName, address, phone, tagline }) => {
   const { theme } = useTheme();
   return (
     <section aria-label="Company Information">
@@ -68,33 +51,6 @@ const CompanyInfo = ({ companyName, address, phone, email, tagline }) => {
           {phone}
         </a>
       </motion.p>
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className="text-sm text-gray-300 mb-2 font-sans"
-      >
-        📧{" "}
-        <a
-          href={`mailto:${email}`}
-          className="hover:text-blue-400 transition-colors"
-        >
-          {email}
-        </a>
-      </motion.p>
-      <motion.a
-        href="https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20inquire%20about%20luxury%20properties%20in%20Thane%20-%20livingluxura.com"
-        target="_blank"
-        rel="noopener noreferrer nofollow"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.6 }}
-        className="flex items-center text-sm text-gray-300 hover:text-blue-400 transition-colors font-sans"
-      >
-        <FaWhatsapp className="mr-2" /> Chat on WhatsApp
-      </motion.a>
     </section>
   );
 };
@@ -181,7 +137,7 @@ const Newsletter = () => {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/macros/s/AKfycbxWToaoFBkzLC2klLCMM5yWbwrWMAUxNlkpv3txG0ckxhYxMn-y9N-Sx8OCKxtWKnIHcA/exec', {
+      const response = await fetch('/api/macros/s/AKfycbwdsD5WMs2vlP-GOUPB-LZeIOcW4hmAkTgmydg1uWzPApUvf1z5Bvouv3wXDjk_vtfbaw/exec', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -223,7 +179,7 @@ const Newsletter = () => {
         className="text-sm text-gray-300 mb-4 font-sans"
       >
         Subscribe to our newsletter for the latest luxury property updates in
-        Thane 2025.
+        Thane, Mumbai.
       </motion.p>
       {message && (
         <motion.p
@@ -268,49 +224,6 @@ const Newsletter = () => {
   );
 };
 
-const SocialMedia = ({ socialLinks }) => {
-  const { theme } = useTheme();
-  return (
-    <section aria-label="Social Media">
-      <motion.h4
-        initial={{ opacity: 0, y: -20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-        className="text-xl font-cinzel font-semibold text-blue-600 mb-4"
-      >
-        Follow Us
-      </motion.h4>
-      <div className="flex space-x-4">
-        {socialLinks.map((link, index) => {
-          const IconComponent = iconMap[link.icon];
-          return (
-            <motion.a
-              key={link.name}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              whileHover={{
-                scale: 1.2,
-                rotate: 5,
-                background: "linear-gradient(to right, #2563eb, #1e40af)",
-              }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="text-gray-300 bg-gray-700 p-2 rounded-full shadow-md transition-colors"
-              aria-label={`Follow us on ${link.name}`}
-            >
-              <IconComponent size={24} />
-            </motion.a>
-          );
-        })}
-      </div>
-    </section>
-  );
-};
-
 const ScrollToTop = () => {
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -335,28 +248,6 @@ const ScrollToTop = () => {
 const Footer = () => {
   const { theme } = useTheme();
 
-  const updatedSocialLinks = [
-    {
-      name: "Facebook",
-      icon: "FaFacebook",
-      href:
-        footerContent.socialLinks.find((l) => l.name === "Facebook")?.href ||
-        "https://www.facebook.com/livingluxura",
-    },
-    {
-      name: "Instagram",
-      icon: "FaInstagram",
-      href:
-        footerContent.socialLinks.find((l) => l.name === "Instagram")?.href ||
-        "https://www.instagram.com/living.luxura",
-    },
-    {
-      name: "WhatsApp",
-      icon: "FaWhatsapp",
-      href: "https://wa.me/9211560084?text=Hello,%20I'd%20like%20to%20inquire%20about%20luxury%20properties%20in%20Thane%20-%20livingluxura.com",
-    },
-  ];
-
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -364,7 +255,7 @@ const Footer = () => {
     "url": "https://livingluxura.com",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Kolshet Road,  Thane West",
+      "streetAddress": "Kolshet Road, Thane West",
       "addressLocality": "Thane",
       "addressRegion": "Maharashtra",
       "postalCode": "400601",
@@ -374,9 +265,8 @@ const Footer = () => {
       "@type": "ContactPoint",
       "telephone": "+91 921 156 0084",
       "contactType": "Customer Service",
-      "email": "connect@marketingbirbal.com",
     },
-    "sameAs": updatedSocialLinks.map((link) => link.href),
+    "sameAs": [],
   };
 
   return (
@@ -390,17 +280,15 @@ const Footer = () => {
 
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.1)_0%,transparent_70%)] opacity-50" />
       <div className="container mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           <CompanyInfo
             companyName="Living Luxura"
-            tagline="Your Gateway to Luxury Real Estate in Thane 2025"
+            tagline="Your Gateway to Luxury Real Estate in Thane, Mumbai"
             address="Kolshet Road, Thane West, Maharashtra 400601"
             phone="+91 921 156 0084"
-            email="connect@marketingbirbal.com"
           />
           <QuickLinks links={navLinks || []} />
           <Newsletter />
-          <SocialMedia socialLinks={updatedSocialLinks} />
         </div>
         <motion.div
           initial={{ opacity: 0 }}
