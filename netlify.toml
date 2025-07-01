@@ -1,0 +1,6 @@
+[[redirects]]
+    from = "/api/*"
+    to = "https://script.google.com/:splat"
+    status = 200
+    force = true
+    headers = { "Access-Control-Allow-Origin" = "*" }
