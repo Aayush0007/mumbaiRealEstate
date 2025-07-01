@@ -1,11 +1,26 @@
-import { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
-import Button from './common/Button';
-import Section from './common/Section';
+import { useState, useRef } from "react";
+import { motion } from "framer-motion";
+import Button from "./common/Button";
+import Section from "./common/Section";
 
-const FormField = ({ id, label, type = 'text', name, value, onChange, onBlur, error, placeholder, required, icon }) => (
+const FormField = ({
+  id,
+  label,
+  type = "text",
+  name,
+  value,
+  onChange,
+  onBlur,
+  error,
+  placeholder,
+  required,
+  icon,
+}) => (
   <div className="relative">
-    <label htmlFor={id} className="block text-dark text-sm font-semibold mb-2 font-sans">
+    <label
+      htmlFor={id}
+      className="block text-dark text-sm font-semibold mb-2 font-sans"
+    >
       {label} {required && <span className="text-red-500">*</span>}
     </label>
     <div className="relative">
@@ -21,7 +36,11 @@ const FormField = ({ id, label, type = 'text', name, value, onChange, onBlur, er
         value={value}
         onChange={onChange}
         onBlur={onBlur}
-        className={`w-full py-3 ${icon ? 'pl-10' : 'pl-4'} pr-4 rounded-lg bg-white/80 text-dark shadow-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all ${error ? 'border-2 border-red-500' : 'border border-gray-200'}`}
+        className={`w-full py-3 ${
+          icon ? "pl-10" : "pl-4"
+        } pr-4 rounded-lg bg-white/80 text-dark shadow-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all ${
+          error ? "border-2 border-red-500" : "border border-gray-200"
+        }`}
         placeholder={placeholder}
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : undefined}
@@ -43,10 +62,10 @@ const FormField = ({ id, label, type = 'text', name, value, onChange, onBlur, er
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    mobile: '',
-    livingIn: '',
-    propertyLocation: '',
+    name: "",
+    mobile: "",
+    livingIn: "",
+    propertyLocation: "",
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,72 +74,78 @@ const ContactForm = () => {
 
   const fields = [
     {
-      id: 'name',
-      label: 'Name',
-      name: 'name',
-      placeholder: 'Your Full Name',
+      id: "name",
+      label: "Name",
+      name: "name",
+      placeholder: "Your Full Name",
       required: true,
-      icon: '👤',
+      icon: "👤",
     },
     {
-      id: 'mobile',
-      label: 'Mobile No.',
-      name: 'mobile',
-      type: 'tel',
-      placeholder: '9876543210',
+      id: "mobile",
+      label: "Mobile No.",
+      name: "mobile",
+      type: "tel",
+      placeholder: "9876543210",
       required: true,
-      icon: '📞',
+      icon: "📞",
     },
   ];
 
   const livingInOptions = [
-    { value: 'Mumbai', label: 'Mumbai' },
-    { value: 'Outside Mumbai', label: 'Outside Mumbai' },
+    { value: "Mumbai", label: "Mumbai" },
+    { value: "Outside Mumbai", label: "Outside Mumbai" },
   ];
 
   const propertyLocationOptions = [
-    { value: 'Thane, Mumbai', label: 'Thane, Mumbai' },
-    { value: 'Outside Thane', label: 'Outside Thane' },
+    { value: "Thane, Mumbai", label: "Thane, Mumbai" },
+    { value: "Outside Thane", label: "Outside Thane" },
   ];
 
   const validateField = (name, value) => {
-    if (name === 'name' && !value.trim()) return 'Name is required';
-    if (name === 'mobile') {
-      if (!value.trim()) return 'Mobile number is required';
-      const cleanValue = value.replace(/\D/g, '');
+    if (name === "name" && !value.trim()) return "Name is required";
+    if (name === "mobile") {
+      if (!value.trim()) return "Mobile number is required";
+      const cleanValue = value.replace(/\D/g, "");
       if (!/^[6-9]\d{9}$/.test(cleanValue)) {
-        return 'Mobile number must be a valid 10-digit Indian number starting with 6, 7, 8, or 9';
+        return "Mobile number must be a valid 10-digit Indian number starting with 6, 7, 8, or 9";
       }
     }
-    if (name === 'livingIn' && !value) return 'Please select an option';
-    if (name === 'propertyLocation' && !value) return 'Please select an option';
-    return '';
+    if (name === "livingIn" && !value) return "Please select an option";
+    if (name === "propertyLocation" && !value) return "Please select an option";
+    return "";
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     let sanitizedValue = value;
-    if (name === 'mobile') {
-      sanitizedValue = value.replace(/\D/g, '').slice(0, 10);
+    if (name === "mobile") {
+      sanitizedValue = value.replace(/\D/g, "").slice(0, 10);
     }
     setFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
-    setErrors((prev) => ({ ...prev, [name]: validateField(name, sanitizedValue) }));
+    setErrors((prev) => ({
+      ...prev,
+      [name]: validateField(name, sanitizedValue),
+    }));
   };
 
   const handleBlur = (e) => {
     const { name, value } = e.target;
     let sanitizedValue = value;
-    if (name === 'mobile') {
-      sanitizedValue = value.replace(/\D/g, '').slice(0, 10);
+    if (name === "mobile") {
+      sanitizedValue = value.replace(/\D/g, "").slice(0, 10);
     }
     setFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
-    setErrors((prev) => ({ ...prev, [name]: validateField(name, sanitizedValue) }));
+    setErrors((prev) => ({
+      ...prev,
+      [name]: validateField(name, sanitizedValue),
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
-    ['name', 'mobile', 'livingIn', 'propertyLocation'].forEach((field) => {
+    ["name", "mobile", "livingIn", "propertyLocation"].forEach((field) => {
       newErrors[field] = validateField(field, formData[field]);
     });
 
@@ -131,33 +156,44 @@ const ContactForm = () => {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/macros/s/AKfycbwdsD5WMs2vlP-GOUPB-LZeIOcW4hmAkTgmydg1uWzPApUvf1z5Bvouv3wXDjk_vtfbaw/exec', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...formData, formType: 'contactUs' }),
-      });
+      const response = await fetch(
+        "/api/macros/s/AKfycbwdsD5WMs2vlP-GOUPB-LZeIOcW4hmAkTgmydg1uWzPApUvf1z5Bvouv3wXDjk_vtfbaw/exec",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...formData, formType: "contactUs" }),
+        }
+      );
       const result = await response.json();
-      if (result.status === 'success') {
-        setFormData({ name: '', mobile: '', livingIn: '', propertyLocation: '' });
+      if (result.status === "success") {
+        setFormData({
+          name: "",
+          mobile: "",
+          livingIn: "",
+          propertyLocation: "",
+        });
         setErrors({});
         setSuccess(true);
         setTimeout(() => setSuccess(false), 3000);
         formRef.current.focus();
       } else {
-        throw new Error(result.message || 'Failed to submit form');
+        throw new Error(result.message || "Failed to submit form");
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      setErrors({ form: 'Failed to send message. Please try again later.' });
+      console.error("Error submitting form:", error);
+      setErrors({ form: "Failed to send message. Please try again later." });
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Section id="contact" className="relative py-24 bg-gradient-to-b from-white to-gray-50">
+    <Section
+      id="contact"
+      className="relative py-24 bg-gradient-to-b from-white to-gray-50"
+    >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.1)_0%,transparent_70%)] opacity-50" />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -182,11 +218,12 @@ const ContactForm = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-center text-lg md:text-xl font-sans text-dark/80 max-w-3xl mx-auto mb-8"
         >
-          Let’s find your dream home! Share your details to inquire about exclusive homes with Living Luxura.
+          Let’s find your dream home! Share your details to inquire about
+          exclusive homes with Living Luxura.
         </motion.p>
         <motion.div
           initial={{ width: 0 }}
-          whileInView={{ width: '200px' }}
+          whileInView={{ width: "200px" }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.5 }}
           className="h-1 bg-gradient-to-r from-blue-600 to-blue-800 mx-auto mb-12"
@@ -234,7 +271,12 @@ const ContactForm = () => {
               {errors.form}
             </motion.div>
           )}
-          <form ref={formRef} onSubmit={handleSubmit} className="space-y-6" noValidate>
+          <form
+            ref={formRef}
+            onSubmit={handleSubmit}
+            className="space-y-6"
+            noValidate
+          >
             {fields.map((field) => (
               <FormField
                 key={field.id}
@@ -266,8 +308,8 @@ const ContactForm = () => {
                     <span
                       className={`flex items-center px-4 py-2 rounded-md border cursor-pointer transition-all ${
                         formData.livingIn === option.value
-                          ? 'bg-blue-600 text-white border-blue-600'
-                          : 'bg-white/80 border-gray-200 hover:border-blue-600'
+                          ? "bg-blue-600 text-white border-blue-600"
+                          : "bg-white/80 border-gray-200 hover:border-blue-600"
                       }`}
                     >
                       {option.label}
@@ -288,7 +330,8 @@ const ContactForm = () => {
 
             <div>
               <label className="block text-dark text-sm font-semibold mb-2 font-sans">
-                Looking for property in... <span className="text-red-500">*</span>
+                Looking for property in...{" "}
+                <span className="text-red-500">*</span>
               </label>
               <div className="flex flex-wrap gap-4">
                 {propertyLocationOptions.map((option) => (
@@ -306,8 +349,8 @@ const ContactForm = () => {
                     <span
                       className={`flex items-center px-4 py-2 rounded-md border cursor-pointer transition-all ${
                         formData.propertyLocation === option.value
-                          ? 'bg-blue-600 text-white border-blue-600'
-                          : 'bg-white/80 border-gray-200 hover:border-blue-600'
+                          ? "bg-blue-600 text-white border-blue-600"
+                          : "bg-white/80 border-gray-200 hover:border-blue-600"
                       }`}
                     >
                       {option.label}
@@ -330,7 +373,9 @@ const ContactForm = () => {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className={`px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-md hover:shadow-lg ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-md hover:shadow-lg ${
+                  isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                }`}
               >
                 {isSubmitting ? (
                   <div className="flex items-center">
@@ -357,7 +402,7 @@ const ContactForm = () => {
                     Sending...
                   </div>
                 ) : (
-                  'Submit'
+                  "Submit"
                 )}
               </Button>
             </div>
