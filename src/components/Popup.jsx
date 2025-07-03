@@ -45,8 +45,6 @@ const Popup = () => {
       if (!cleaned) return 'Phone number is required';
       if (!/^[6-9]\d{9}$/.test(cleaned)) return 'Enter a valid 10-digit Indian phone number';
     }
-    if (name === 'lookingFor' && !value) return 'Please select an option';
-    if (name === 'buyingPlan' && !value) return 'Please select an option';
     return '';
   };
 
@@ -99,7 +97,7 @@ const Popup = () => {
         setTimeout(() => {
           setIsOpen(false);
           setSuccess(false);
-        }, 2000);
+        }, 1000);
       } else {
         throw new Error(result.message || 'Failed to submit form');
       }
@@ -223,7 +221,7 @@ const Popup = () => {
 
             <div>
               <label htmlFor="popup-lookingFor" className="block text-dark text-xs font-semibold mb-1">
-                You are looking for <span className="text-red-500">*</span>
+                You are living in? <span className="text-red-500"></span>
               </label>
               <select
                 id="popup-lookingFor"
@@ -237,8 +235,8 @@ const Popup = () => {
                 required
               >
                 <option value="">Select an option</option>
-                <option value="Property to Buy">Property to Buy</option>
-                <option value="Property For Investment">Property For Investment</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Outside Mumbai">Outside Mumbai</option>
               </select>
               {errors.lookingFor && (
                 <motion.p className="text-red-500 text-xs mt-1">{errors.lookingFor}</motion.p>
@@ -247,7 +245,7 @@ const Popup = () => {
 
             <div>
               <label htmlFor="popup-buyingPlan" className="block text-dark text-xs font-semibold mb-1">
-                Planning to buy <span className="text-red-500">*</span>
+                Looking for property in... <span className="text-red-500"></span>
               </label>
               <select
                 id="popup-buyingPlan"
@@ -261,8 +259,8 @@ const Popup = () => {
                 required
               >
                 <option value="">Select an option</option>
-                <option value="Soon">Soon</option>
-                <option value="Within 4 - 6 Months">Within 4 - 6 Months</option>
+                <option value="Thane, Mumbai">Thane, Mumbai</option>
+                <option value="Outside Thane, Mumbai">Outside Thane, Mumbai</option>
               </select>
               {errors.buyingPlan && (
                 <motion.p className="text-red-500 text-xs mt-1">{errors.buyingPlan}</motion.p>
