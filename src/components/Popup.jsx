@@ -265,7 +265,7 @@ const Popup = () => {
 
             <div>
               <label htmlFor="popup-buyingPlan" className="block text-dark text-xs font-semibold mb-1">
-                Looking for property in... <span className="text-red-500">*</span>
+                Looking for property in Thane to... <span className="text-red-500">*</span>
               </label>
               <select
                 id="popup-buyingPlan"
@@ -279,8 +279,8 @@ const Popup = () => {
                 required
               >
                 <option value="">Select an option</option>
-                <option value="Thane, Mumbai">Thane, Mumbai</option>
-                <option value="Outside Thane, Mumbai">Outside Thane, Mumbai</option>
+                <option value="Buy">Buy</option>
+                <option value="Rent">Rent</option>
               </select>
               {errors.buyingPlan && (
                 <motion.p className="text-red-500 text-xs mt-1">{errors.buyingPlan}</motion.p>
