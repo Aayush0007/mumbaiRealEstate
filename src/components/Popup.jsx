@@ -39,14 +39,34 @@ const Popup = () => {
   }, [showClose]);
 
   const validateField = (name, value) => {
-    if (name === 'name' && !value.trim()) return 'Name is required';
-    if (name === 'phone') {
-      const cleaned = value.replace(/\D/g, '');
-      if (!cleaned) return 'Phone number is required';
-      if (!/^[6-9]\d{9}$/.test(cleaned)) return 'Enter a valid 10-digit Indian phone number';
+  if (name === 'name') {
+    if (!value.trim()) {
+      return 'Name is required';
     }
-    return '';
-  };
+    if (/\d/.test(value)) {
+      return 'Name cannot contain numbers';
+    }
+  }
+
+  if (name === 'phone') {
+    const cleaned = value.replace(/\D/g, '');
+    if (!cleaned) return 'Phone number is required';
+    if (!/^[6-9]\d{9}$/.test(cleaned)) {
+      return 'Enter a valid 10-digit Indian phone number';
+    }
+  }
+
+  if (name === 'lookingFor' && !value.trim()) {
+    return 'This field is required';
+  }
+
+  if (name === 'buyingPlan' && !value.trim()) {
+    return 'This field is required';
+  }
+
+  return '';
+};
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -221,7 +241,7 @@ const Popup = () => {
 
             <div>
               <label htmlFor="popup-lookingFor" className="block text-dark text-xs font-semibold mb-1">
-                You are living in? <span className="text-red-500"></span>
+                You are living in? <span className="text-red-500">*</span>
               </label>
               <select
                 id="popup-lookingFor"
@@ -245,7 +265,7 @@ const Popup = () => {
 
             <div>
               <label htmlFor="popup-buyingPlan" className="block text-dark text-xs font-semibold mb-1">
-                Looking for property in... <span className="text-red-500"></span>
+                Looking for property in... <span className="text-red-500">*</span>
               </label>
               <select
                 id="popup-buyingPlan"
