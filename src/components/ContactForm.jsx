@@ -98,8 +98,8 @@ const ContactForm = () => {
   ];
 
   const propertyLocationOptions = [
-    { value: "Thane, Mumbai", label: "Thane, Mumbai" },
-    { value: "Outside Thane", label: "Outside Thane" },
+    { value: "Buy", label: "Buy" },
+    { value: "Rent", label: "Rent" },
   ];
 
   const validateField = (name, value) => {
@@ -330,7 +330,7 @@ const ContactForm = () => {
 
             <div>
               <label className="block text-dark text-sm font-semibold mb-2 font-sans">
-                Looking for property in...{" "}
+                Looking for property in Thane to...{" "}
                 <span className="text-red-500">*</span>
               </label>
               <div className="flex flex-wrap gap-4">
