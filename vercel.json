@@ -13,7 +13,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://script.google.com/macros/s/AKfycbwdsD5WMs2vlP-GOUPB-LZeIOcW4hmAkTgmydg1uWzPApUvf1z5Bvouv3wXDjk_vtfbaw/exec"
+      "destination": "https://script.google.com/macros/s/AKfycbxnosMFLAycL6illjReaBTcJ6vAunS5kDhfIhJKauE5TaHF33Sgxd751uQk47IJpWPj/exec"
     },
     {
       "source": "/(.*)",
