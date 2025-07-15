@@ -100,12 +100,7 @@ const Navbar = () => {
               />
             </Link>
           </motion.div>
-          <Link
-            to="/"
-            className="text-lg sm:text-xl md:text-2xl font-cinzel font-bold text-white hover:text-blue-400 transition-colors duration-300"
-          >
-            Living Luxura
-          </Link>
+          
         </div>
         <div className="flex items-center space-x-4 sm:space-x-6">
           <ul className="hidden md:flex space-x-8 lg:space-x-10">
