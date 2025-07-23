@@ -22,7 +22,7 @@ const Home = ({ utmParams }) => {
             <AboutUs /> {/* Add the About Us section */}
             <Properties />
             <PropertyLocation />
-            <ContactForm />
+            <ContactForm utmParams={utmParams} />
             <Popup utmParams={utmParams}/>
           </Suspense>
         </main>
