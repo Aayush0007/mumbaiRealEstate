@@ -11,7 +11,7 @@ import ContactForm from "../components/ContactForm";
 import Popup from "../components/Popup";
 import PropertyLocation from "../components/PropertyLocation";
 
-const Home = () => {
+const Home = ({ utmParams }) => {
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-white text-dark">
@@ -23,7 +23,7 @@ const Home = () => {
             <Properties />
             <PropertyLocation />
             <ContactForm />
-            <Popup />
+            <Popup utmParams={utmParams}/>
           </Suspense>
         </main>
         <Footer />  

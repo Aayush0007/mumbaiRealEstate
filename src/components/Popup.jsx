@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTimes } from 'react-icons/fa';
 
-const Popup = () => {
+const Popup = ({ utmParams }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [showClose, setShowClose] = useState(false);
   const [formData, setFormData] = useState({
@@ -102,12 +102,12 @@ const Popup = () => {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/macros/s/AKfycbxnosMFLAycL6illjReaBTcJ6vAunS5kDhfIhJKauE5TaHF33Sgxd751uQk47IJpWPj/exec', {
+      const response = await fetch('/api/macros/s/AKfycbwn30pcr7SqpkGFGqWp3H-obDdFiqqNk9cuAywpXTaxP60xpitIgCcKmv4m8NFMP-Y/exec', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...formData, formType: 'popup' }),
+        body: JSON.stringify({ ...formData, formType: 'popup', ...utmParams }), // Add utmParams here
       });
       const result = await response.json();
       if (result.status === 'success') {
