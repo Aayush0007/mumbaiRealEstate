@@ -60,7 +60,8 @@ const FormField = ({
   </div>
 );
 
-const ContactForm = () => {
+// CHANGE 1: Accept utmParams as a prop
+const ContactForm = ({ utmParams }) => {
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
@@ -163,7 +164,8 @@ const ContactForm = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ ...formData, formType: "contactUs" }),
+          // CHANGE 2: Add utmParams to the data sent to Google Sheets
+          body: JSON.stringify({ ...formData, formType: "contactUs", ...utmParams }),
         }
       );
       const result = await response.json();
