@@ -19,7 +19,7 @@ const Home = ({ utmParams }) => {
           <Suspense fallback={<LoadingSpinner />}>
             <Navbar />
             <Hero />
-            <AboutUs /> {/* Add the About Us section */}
+            <AboutUs /> 
             <Properties />
             <PropertyLocation />
             <ContactForm utmParams={utmParams} />
