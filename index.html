@@ -167,15 +167,6 @@
       }
     </script>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X26L1R2KHL"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-X26L1R2KHL');
-  </script>
-
   <!-- Google Tag Manager -->
   <script>
     (function (w, d, s, l, i) {
@@ -189,7 +180,7 @@
   </script>
   <!-- End Google Tag Manager -->
 
-   <!-- Meta Pixel Code -->
+  <!-- Meta Pixel Code -->
   <script>
     !function (f, b, e, v, n, t, s) {
       if (f.fbq) return; n = f.fbq = function () {
@@ -205,8 +196,7 @@
     fbq('init', '2158649914562505');
     fbq('track', 'PageView');
   </script>
-  <noscript><img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=2158649914562505&ev=PageView&noscript=1" /></noscript>
+  <!-- The <noscript> part was moved from here to the body -->
   <!-- End Meta Pixel Code -->
 
   <meta http-equiv="Content-Security-Policy" content="
@@ -221,7 +211,12 @@
 </head>
 
 <body>
+  <!-- Meta Pixel noscript part moved here -->
+  <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=2158649914562505&ev=PageView&noscript=1" /></noscript>
+
   <div id="root"></div>
+  
   <noscript>
     <p style="text-align: center; padding: 20px; font-family: Arial, sans-serif; color: #333;">
       JavaScript is required to use this website. Please enable JavaScript in your browser settings to explore luxury
@@ -235,6 +230,7 @@
   </noscript>
   <!-- End Google Tag Manager (noscript) -->
   <script type="module" src="/src/main.jsx" defer></script>
+</body>
 </body>
 
 </html>
