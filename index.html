@@ -189,14 +189,34 @@
   </script>
   <!-- End Google Tag Manager -->
 
+   <!-- Meta Pixel Code -->
+  <script>
+    !function (f, b, e, v, n, t, s) {
+      if (f.fbq) return; n = f.fbq = function () {
+        n.callMethod ?
+        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+      };
+      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+      n.queue = []; t = b.createElement(e); t.async = !0;
+      t.src = v; s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s)
+    }(window, document, 'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '2158649914562505');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=2158649914562505&ev=PageView&noscript=1" /></noscript>
+  <!-- End Meta Pixel Code -->
+
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://maps.googleapis.com https://www.google-analytics.com 'sha384-PEBoeZv4VAuAT5osi7EU9mav3PhC61/9SeVb37fhlyCq3RIgGjJA0Yea8L+kLPsK' 'sha384-IDyr+T2cZ4Yz0axAOESaDFWiBqrLNuJREpXrowAUIz/nYrM5oXtmw2eeDUSqNdZl' 'sha384-z6RQT4SXIJmRkpH41qJ+b+MLCOWo6Y4VpYvOes5DDBi3yjn0BMr7ZMjgrptacwSe' 'sha384-X04EkAAYHSFKf9OwjgNMCKHvaZQYvhgUZ962QNOIXn03fyEqdfKDuKmAxc0selMq';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://maps.googleapis.com https://www.google-analytics.com https://connect.facebook.net 'sha384-PEBoeZv4VAuAT5osi7EU9mav3PhC61/9SeVb37fhlyCq3RIgGjJA0Yea8L+kLPsK' 'sha384-IDyr+T2cZ4Yz0axAOESaDFWiBqrLNuJREpXrowAUIz/nYrM5oXtmw2eeDUSqNdZl' 'sha384-z6RQT4SXIJmRkpH41qJ+b+MLCOWo6Y4VpYvOes5DDBi3yjn0BMr7ZMjgrptacwSe' 'sha384-X04EkAAYHSFKf9OwjgNMCKHvaZQYvhgUZ962QNOIXn03fyEqdfKDuKmAxc0selMq';
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src 'self' https://fonts.gstatic.com data:;
-    img-src 'self' blob: data: https://livingluxura.com https://ik.imagekit.io https://cdn-icons-png.flaticon.com https://www.lodhagroup.com https://www.google-analytics.com https://www.googletagmanager.com https://www.google.co.in;
+    img-src 'self' blob: data: https://livingluxura.com https://ik.imagekit.io https://cdn-icons-png.flaticon.com https://www.lodhagroup.com https://www.google-analytics.com https://www.googletagmanager.com https://www.google.co.in https://www.facebook.com;
     frame-src 'self' https://www.google.com https://www.youtube.com https://www.googletagmanager.com;
-    connect-src 'self' https://livingluxura.com https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com;
+    connect-src 'self' https://livingluxura.com https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://www.facebook.com;
   " />
 </head>
 
